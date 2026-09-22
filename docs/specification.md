@@ -200,3 +200,28 @@ Les données affichées doivent être échappées avec :
 
 ```php
 htmlspecialchars()
+```
+### 8.4 Gestion des sessions
+
+Les pages privées doivent vérifier la présence de :
+
+```php
+$_SESSION['user_id']
+```
+### 8.5 Autorisation
+
+Un client ne doit pas pouvoir accéder à une commande appartenant à un autre client simplement en modifiant l'identifiant dans l'URL.
+
+Par exemple :
+
+```text
+commande.php?id=25
+```
+## 9. Architecture du système
+
+L'application MiniShop doit utiliser une architecture à trois couches basée sur le modèle MVC :
+
+- **Modèle** : gestion des données et communication avec la base de données ;
+- **Vue** : affichage de l'interface utilisateur ;
+- **Contrôleur** : gestion des requêtes et coordination entre les modèles et les vues.
+
