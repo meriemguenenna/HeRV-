@@ -1,100 +1,81 @@
-**# MiniShop : Modèle logique de données (MLD)**
+# MiniShop — Modèle logique de données (MLD)
 
-Ce document décrit la transformation du modèle conceptuel de données (MCD) de **MiniShop** en modèle logique de données (MLD). Il présente les tables relationnelles, leurs attributs, les clés primaires et les clés étrangères nécessaires à la structuration de la base de données.
+> **Objectif :** transformer le modèle conceptuel de données (MCD) de MiniShop en un modèle logique relationnel cohérent, prêt à être implémenté sous MySQL.
 
-**## Sommaire**
+---
 
-**-&#x20;**[Objectif](#objectif)  
-**-&#x20;**[Transformation du MCD en MLD](#transformation-du-mcd-en-mld)  
-**-&#x20;**[Tables relationnelles](#tables-relationnelles)  
-**-&#x20;**[Relations entre les tables](#relations-entre-les-tables)  
-**-&#x20;**[Règles de gestion](#règles-de-gestion)  
-**-&#x20;**[Compatibilité avec MySQL](#compatibilité-avec-mysql)  
-**-&#x20;**[Livrable attendu](#livrable-attendu)
+## Sommaire
 
-**---**
+- [Présentation](#présentation)
+- [Structure relationnelle](#structure-relationnelle)
+- [Relations entre les tables](#relations-entre-les-tables)
+- [Contraintes et règles de gestion](#contraintes-et-règles-de-gestion)
+- [Compatibilité MySQL](#compatibilité-mysql)
+- [Livrable attendu](#livrable-attendu)
 
-**## Objectif**
+---
 
-L'objectif est de transformer le MCD de MiniShop en un modèle logique de données permettant de représenter les informations sous forme de tables relationnelles.
+## Présentation
 
-Ce travail consiste à :
-**-&#x20;**Transformer les entités du MCD en tables.
-**-&#x20;**Définir les attributs de chaque table.
-**-&#x20;**Identifier les clés primaires (PK).
-**-&#x20;**Définir les clés étrangères (FK).
-**-&#x20;**Respecter les relations et les cardinalités du MCD.
-**-&#x20;**Préparer la structure de la base de données pour une implémentation sous MySQL.
+Le modèle logique de données organise les informations de MiniShop en tables relationnelles. Il définit les attributs, les clés primaires et les clés étrangères nécessaires pour assurer la cohérence de la base de données.
 
-**## Transformation du MCD en MLD**
+### Travail à réaliser
 
-La transformation du MCD en MLD repose sur les règles suivantes :
+| Étape | Description |
+|:--|:--|
+| **01 — Entités** | Transformer les entités du MCD en tables relationnelles. |
+| **02 — Attributs** | Définir les colonnes de chaque table. |
+| **03 — Clés primaires** | Identifier chaque enregistrement de manière unique. |
+| **04 — Clés étrangères** | Représenter les relations entre les tables. |
+| **05 — Vérification** | Contrôler les cardinalités et les règles métier. |
+| **06 — Implémentation** | Préparer une structure compatible avec MySQL. |
 
-**-&#x20;**Chaque entité du MCD devient une table relationnelle.
-**-&#x20;**Chaque attribut d'une entité devient une colonne de la table correspondante.
-**-&#x20;**Chaque table possède une clé primaire permettant d'identifier chaque enregistrement de manière unique.
-**-&#x20;**Les relations entre les tables sont représentées par des clés étrangères.
-**-&#x20;**Les associations de type plusieurs-à-plusieurs sont représentées par des tables intermédiaires contenant les clés étrangères des tables concernées.
+---
 
-**## Tables relationnelles**
+## Structure relationnelle
 
-Le MLD doit notamment représenter les entités suivantes :
+Les tables principales identifiées pour MiniShop sont présentées ci-dessous.
 
-**| Table | Rôle |**
-**|---|---|**
-**| Client | Contient les informations relatives aux clients. |**
-**| Commande | Enregistre les commandes passées par les clients. |**
-**| LigneCommande | Détaille les produits et les quantités associés à chaque commande. |**
-**| Produit | Contient les informations relatives aux produits disponibles dans la boutique. |**
-**| Categorie | Regroupe les produits par catégorie. |**
+| Table | Description | Clé primaire |
+|:--|:--|:--|
+| `Client` | Informations relatives aux clients. | À définir selon le MCD |
+| `Commande` | Commandes passées par les clients. | À définir selon le MCD |
+| `LigneCommande` | Produits et quantités associés aux commandes. | À définir selon le MCD |
+| `Produit` | Informations relatives aux produits. | À définir selon le MCD |
+| `Categorie` | Catégories auxquelles appartiennent les produits. | À définir selon le MCD |
 
-Les attributs exacts de chaque table doivent être définis à partir du MCD de MiniShop et des règles métier du cahier des charges.
+> **Remarque :** les attributs et les clés exacts doivent être repris du MCD de MiniShop afin de respecter le modèle d'origine.
 
-**## Relations entre les tables**
+---
 
-Les relations suivantes doivent être vérifiées lors de la construction du MLD :
+## Relations entre les tables
 
-**-&#x20;**Un client peut passer plusieurs commandes.
-**-&#x20;**Une commande appartient à un seul client.
-**-&#x20;**Une commande peut contenir plusieurs lignes de commande.
-**-&#x20;**Chaque ligne de commande concerne un produit.
-**-&#x20;**Un produit peut apparaître dans plusieurs lignes de commande.
-**-&#x20;**Une catégorie peut regrouper plusieurs produits.
-**-&#x20;**Chaque produit est associé à une catégorie, si les cardinalités du MCD le prévoient.
+Le modèle doit représenter les relations entre les clients, les commandes, les lignes de commande, les produits et les catégories.
 
-Les clés étrangères doivent assurer la cohérence entre les tables et respecter les cardinalités définies dans le MCD.
+| Relation | Cardinalité attendue | Description |
+|:--|:--|:--|
+| Client → Commande | 1,N | Un client peut passer plusieurs commandes. |
+| Commande → LigneCommande | 1,N | Une commande contient plusieurs lignes de commande. |
+| Produit → LigneCommande | 0,N | Un produit peut apparaître dans plusieurs lignes de commande. |
+| Categorie → Produit | 1,N | Une catégorie peut regrouper plusieurs produits. |
 
-**## Règles de gestion**
+Ces cardinalités sont à vérifier avec le MCD original.
 
-Le modèle logique de données doit respecter les règles métier définies dans le cahier des charges de MiniShop.
+### Représentation des relations
 
-**-&#x20;**Chaque enregistrement doit être identifié de manière unique par sa clé primaire.
-**-&#x20;**Les clés étrangères doivent référencer des enregistrements existants.
-**-&#x20;**Les relations entre clients, commandes, lignes de commande, produits et catégories doivent être cohérentes.
-**-&#x20;**Les contraintes d'intégrité doivent empêcher les incohérences dans les données.
-**-&#x20;**Les attributs et les contraintes doivent correspondre aux besoins fonctionnels de l'application.
-
-**## Compatibilité avec MySQL**
-
-Le MLD doit permettre la création du schéma relationnel sous MySQL.
-
-Il faut notamment :
-**-&#x20;**Choisir des types de données adaptés aux attributs.
-**-&#x20;**Définir les clés primaires et les clés étrangères.
-**-&#x20;**Ajouter les contraintes d'intégrité nécessaires.
-**-&#x20;**Vérifier la cohérence des relations entre les tables.
-**-&#x20;**S'assurer que la structure obtenue peut être traduite en instructions SQL de création de tables.
-
-**## Livrable attendu**
-
-Le livrable final comprend un MLD complet et cohérent de la base de données MiniShop, avec :
-
-**-&#x20;**La liste des tables relationnelles.
-**-&#x20;**Les attributs de chaque table.
-**-&#x20;**Les clés primaires et les clés étrangères.
-**-&#x20;**Une représentation claire des relations entre les tables.
-**-&#x20;**Une structure compatible avec une future implémentation sous MySQL.
-
-**## Résultat attendu**
-
-À l'issue de ce travail, le MLD doit fournir une représentation logique et structurée de la base de données MiniShop, servant de base à la création du schéma relationnel et à son implémentation sous MySQL.
+```text
+CLIENT (1) -------- (N) COMMANDE
+                         |
+                         | (1,N)
+                         |
+                         v
+                   LIGNECOMMANDE
+                         ^
+                         | (0,N)
+                         |
+PRODUIT (N) -------------+
+    |
+    | (N,1)
+    |
+    v
+CATEGORIE
