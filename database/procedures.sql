@@ -1,4 +1,6 @@
-USE minishop;
+
+/*USE minishop;
+*/
 
 DELIMITER //
 
@@ -7,7 +9,8 @@ CREATE PROCEDURE rechercher_produit(IN p_nom VARCHAR(150))
 BEGIN
     SELECT *
     FROM PRODUIT
-    WHERE nom LIKE CONCAT('%', p_nom, '%');
+    WHERE nom LIKE CONCAT('%', p_nom, '%')
+      AND actif = TRUE;
 END //
 
 -- 2. Récupérer les produits d'une catégorie
@@ -15,7 +18,8 @@ CREATE PROCEDURE produits_par_categorie(IN p_id_categorie INT)
 BEGIN
     SELECT *
     FROM PRODUIT
-    WHERE id_categorie = p_id_categorie;
+    WHERE id_categorie = p_id_categorie
+      AND actif = TRUE;
 END //
 
 -- 3. Consulter les commandes d'un client
@@ -47,10 +51,26 @@ CREATE PROCEDURE modifier_stock(
     IN p_nouveau_stock INT
 )
 BEGIN
-    IF p_nouveau_stock >= 0 THEN
+    IF p_nouveau_stock IS NULL OR p_nouveau_stock < 0 THEN
+
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Le stock ne peut pas etre negatif';
+
+    ELSEIF NOT EXISTS (
+        SELECT 1
+        FROM PRODUIT
+        WHERE id_produit = p_id_produit
+    ) THEN
+
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Produit introuvable';
+
+    ELSE
+
         UPDATE PRODUIT
         SET stock = p_nouveau_stock
         WHERE id_produit = p_id_produit;
+
     END IF;
 END //
 
