@@ -1,93 +1,180 @@
-# MiniShop
+### MiniShop
 
+## Présentation du projet
 
+MiniShop est une application web de commerce électronique développée dans le cadre d'une SAE du BUT Informatique.
 
-## Getting started
+L'objectif est de concevoir une boutique en ligne permettant de consulter un catalogue de produits, de gérer un panier et, à terme, de passer des commandes.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Le projet est développé en binôme et suit une architecture MVC (Modèle – Vue – Contrôleur).
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## Technologies utilisées
 
-## Add your files
+- PHP : développement côté serveur
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+- MySQL : gestion de la base de données
 
-```
-cd existing_repo
-git remote add origin https://iut-git.unice.fr/minishop/minishop.git
-git branch -M main
-git push -uf origin main
-```
+- PDO : communication sécurisée entre PHP et MySQL
 
-## Integrate with your tools
+- HTML5 / CSS3 : structure et mise en forme des pages
 
-* [Set up project integrations](https://iut-git.unice.fr/minishop/minishop/-/settings/integrations)
+- JavaScript : évolutions possibles de l'interface
 
-## Collaborate with your team
+- Git / GitLab : versionnement et travail collaboratif
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+- PlantUML : modélisation UML
 
-## Test and Deploy
+## Fonctionnalités réalisées
 
-Use the built-in continuous integration in GitLab.
+# Catalogue de produits
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+- Affichage des produits actifs depuis la base MySQL
+- Présentation du nom, de la description, du prix et du stock
+- Affichage des images des produits
+- Interface responsive avec un design violet
 
-***
+# Gestion du panier
 
-# Editing this README
+- Ajout de produits au panier
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+- Conservation du panier avec les sessions PHP
 
-## Suggestions for a good README
+- Affichage des produits sélectionnés
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+- Calcul automatique des sous-totaux et du total
 
-## Name
-Choose a self-explaining name for your project.
+- Augmentation et diminution des quantités
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+- Suppression d'un produit
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+- Vérification du stock disponible
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+- Protection des formulaires avec un jeton CSRF
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+# Base de données
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+- Gestion des clients, catégories, produits, commandes et lignes de commande
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+- Contraintes d'intégrité
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+- Procédures stockées
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+- Triggers pour certaines règles métier
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+- Jeux de données de test
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+## Fonctionnalités prévues
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+- Inscription et connexion des clients
 
-## License
-For open source projects, say how it is licensed.
+- Gestion des comptes utilisateurs
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+- Validation des commandes
+
+- Consultation de l'historique des commandes
+
+- Interface d'administration
+
+- Gestion des produits et des catégories par un administrateur
+
+Le paiement bancaire réel n'est pas encore implémenté.
+
+## Architecture du projet
+
+minishop/
+├── app/
+│   ├── controllers/
+│   │   ├── ProduitController.php
+│   │   └── PanierController.php
+│   ├── models/
+│   │   └── Produit.php
+│   └── views/
+│       ├── produits/
+│       │   └── index.php
+│       └── panier/
+│           └── index.php
+├── config/
+│   └── database.php
+├── database/
+│   ├── schema.sql
+│   ├── data.sql
+│   ├── procedures.sql
+│   └── triggers.sql
+├── docs/
+│   ├── specification.md
+│   └── tests-validation.md
+├── public/
+│   ├── css/
+│   │   └── style.css
+│   ├── images/
+│   └── index.php
+├── .gitignore
+└── README.md
+
+## Installation et configuration
+
+# Prérequis
+
+- PHP avec l'extension PDO MySQL
+
+- Serveur web compatible PHP
+
+- Serveur MySQL
+
+- Git
+
+# Mise en place
+
+1. Récupérer le dépôt GitLab.
+
+2. Créer une base de données MySQL.
+
+3. Exécuter les scripts SQL du dossier database/ dans l'ordre : schema.sql, procedures.sql, triggers.sql, puis data.sql.
+
+4. Configurer le fichier local config/database.php avec les paramètres de connexion MySQL.
+
+5. Configurer le serveur web pour accéder à public/index.php.
+
+6. Ouvrir l'application dans un navigateur.
+
+# Sécurité : le fichier config/database.php contient des informations locales sensibles. Il est exclu du suivi Git grâce au fichier .gitignore.
+
+## Tests
+
+Les tests réalisés concernent notamment :
+
+- La recherche de produits
+
+- La récupération des produits par catégorie
+
+- La consultation des commandes
+
+- Les contraintes de prix et de stock
+
+- La vérification des transitions de statut
+
+- Les procédures stockées et les triggers
+
+Le détail des tests SQL est disponible dans docs/tests-validation.md.
+
+## Organisation du travail
+
+Le projet est développé en binôme avec GitLab.
+
+Les fonctionnalités sont développées sur des branches dédiées, puis peuvent être intégrées après vérification.
+
+Exemple de branche :
+
+feature/minishop-mvc-panier
+
+Les commits sont organisés par fonctionnalité afin de conserver un historique clair.
+
+## État d'avancement
+
+Le catalogue et le panier sont fonctionnels.
+
+Les prochaines étapes concernent l'authentification, la validation des commandes et les fonctionnalités d'administration.
+
+## Contexte
+
+Projet universitaire — SAE, BUT Informatique.
