@@ -1,0 +1,5 @@
+# Identifiants MySQL
+/config/database.php
+
+# Ancien fichier de test
+/public/test-connexion.php
