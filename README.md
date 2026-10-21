@@ -1,183 +1,201 @@
-### MiniShop
+#  MiniShop
 
-## Présentation du projet
+Application web de commerce électronique développée en **PHP / MySQL** avec une architecture **MVC**, dans le cadre d'une SAÉ du BUT Informatique.
 
-MiniShop est une application web de commerce électronique développée dans le cadre d'une SAE du BUT Informatique.
+MiniShop permet de consulter un catalogue de produits, de gérer un panier et, à terme, de passer des commandes.
 
-L'objectif est de concevoir une boutique en ligne permettant de consulter un catalogue de produits, de gérer un panier et, à terme, de passer des commandes.
+## Sommaire
 
-Le projet est développé en binôme et suit une architecture MVC (Modèle – Vue – Contrôleur).
+- [Fonctionnalités](#fonctionnalités)
+- [Technologies](#technologies)
+- [Architecture](#architecture)
+- [Installation](#installation)
+- [Tests](#tests)
+- [Documentation](#documentation)
+- [Organisation du travail](#organisation-du-travail)
+- [État d'avancement](#état-davancement)
+- [Contexte](#contexte)
 
-## Technologies utilisées
+## Fonctionnalités
 
-- PHP : développement côté serveur
+### Réalisées
 
-- MySQL : gestion de la base de données
-
-- PDO : communication sécurisée entre PHP et MySQL
-
-- HTML5 / CSS3 : structure et mise en forme des pages
-
-- JavaScript : évolutions possibles de l'interface
-
-- Git / GitLab : versionnement et travail collaboratif
-
-- PlantUML : modélisation UML
-
-## Fonctionnalités réalisées
-
-# Catalogue de produits
+**Catalogue de produits**
 
 - Affichage des produits actifs depuis la base MySQL
-- Présentation du nom, de la description, du prix et du stock
-- Affichage des images des produits
+- Présentation du nom, de la description, du prix, du stock et de l'image de chaque produit
 - Interface responsive avec un design violet
 
-# Gestion du panier
+**Panier**
 
 - Ajout de produits au panier
-
-- Conservation du panier avec les sessions PHP
-
-- Affichage des produits sélectionnés
-
+- Conservation du panier grâce aux sessions PHP
 - Calcul automatique des sous-totaux et du total
-
-- Augmentation et diminution des quantités
-
-- Suppression d'un produit
-
+- Augmentation, diminution et suppression des quantités
 - Vérification du stock disponible
+- Protection des formulaires par jeton CSRF
 
-- Protection des formulaires avec un jeton CSRF
-
-# Base de données
+**Base de données**
 
 - Gestion des clients, catégories, produits, commandes et lignes de commande
-
 - Contraintes d'intégrité
-
 - Procédures stockées
-
 - Triggers pour certaines règles métier
-
 - Jeux de données de test
 
-## Fonctionnalités prévues
+### Prévues
 
-- Inscription et connexion des clients
+- [ ] Inscription et connexion des clients
+- [ ] Gestion des comptes utilisateurs
+- [ ] Validation des commandes
+- [ ] Historique des commandes
+- [ ] Interface d'administration (gestion des produits et des catégories)
 
-- Gestion des comptes utilisateurs
+> Le paiement bancaire réel n'est pas implémenté.
 
-- Validation des commandes
+## Technologies
 
-- Consultation de l'historique des commandes
+| Technologie | Utilisation |
+|---|---|
+| PHP | Développement côté serveur |
+| MySQL | Gestion de la base de données |
+| PDO | Communication sécurisée entre PHP et MySQL |
+| HTML5 / CSS3 | Structure et mise en forme des pages |
+| JavaScript | Évolutions possibles de l'interface |
+| Git / GitLab | Versionnement et travail collaboratif |
+| PlantUML | Modélisation UML |
 
-- Interface d'administration
+## Architecture
 
-- Gestion des produits et des catégories par un administrateur
+Le projet suit le modèle **MVC** : le contrôleur reçoit la requête, interroge le modèle, puis affiche la vue.
 
-Le paiement bancaire réel n'est pas encore implémenté.
+```mermaid
+flowchart LR
+    A[Navigateur] --> B[public/index.php]
+    B --> C[Contrôleur]
+    C --> D[Modèle]
+    D --> E[(MySQL via PDO)]
+    C --> F[Vue]
+    F --> A
+```
 
-## Architecture du projet
+### Arborescence
 
 ```text
 minishop/
 ├── app/
 │   ├── controllers/
-│   │   ├── ProduitController.php
-│   │   └── PanierController.php
+│   │   ├── ProduitController.php    # Catalogue
+│   │   └── PanierController.php     # Panier
 │   ├── models/
-│   │   └── Produit.php
+│   │   └── Produit.php              # Accès aux produits
 │   └── views/
-│       ├── produits/
-│       │   └── index.php
-│       └── panier/
-│           └── index.php
+│       ├── produits/index.php
+│       └── panier/index.php
 ├── config/
-│   └── database.php
+│   └── database.php                 # Connexion MySQL (local, non versionné)
 ├── database/
-│   ├── schema.sql
-│   ├── data.sql
-│   ├── procedures.sql
-│   └── triggers.sql
+│   ├── schema.sql                   # Tables et contraintes
+│   ├── procedures.sql               # Procédures stockées
+│   ├── triggers.sql                 # Triggers
+│   └── data.sql                     # Jeux de données de test
 ├── docs/
 │   ├── specification.md
 │   └── tests-validation.md
 ├── public/
-│   ├── css/
-│   │   └── style.css
+│   ├── css/style.css
 │   ├── images/
-│   └── index.php
+│   └── index.php                    # Point d'entrée
 ├── .gitignore
 └── README.md
-
 ```
 
-## Installation et configuration
+## Installation
 
-# Prérequis
+### Prérequis
 
-- PHP avec l'extension PDO MySQL
-
-- Serveur web compatible PHP
-
-- Serveur MySQL
-
+- PHP avec l'extension **PDO MySQL**
+- Un serveur MySQL
+- Un serveur web compatible PHP (ou le serveur intégré de PHP)
 - Git
 
-# Mise en place
+### Étapes
 
-1. Récupérer le dépôt GitLab.
+**1. Récupérer le dépôt**
 
-2. Créer une base de données MySQL.
+```bash
+git clone <url-du-depot-gitlab>
+cd minishop
+```
 
-3. Exécuter les scripts SQL du dossier database/ dans l'ordre : schema.sql, procedures.sql, triggers.sql, puis data.sql.
+**2. Créer la base de données**
 
-4. Configurer le fichier local config/database.php avec les paramètres de connexion MySQL.
+```bash
+mysql -u root -p -e "CREATE DATABASE minishop CHARACTER SET utf8mb4;"
+```
 
-5. Configurer le serveur web pour accéder à public/index.php.
+**3. Exécuter les scripts SQL dans cet ordre**
 
-6. Ouvrir l'application dans un navigateur.
+```bash
+mysql -u root -p minishop < database/schema.sql
+mysql -u root -p minishop < database/procedures.sql
+mysql -u root -p minishop < database/triggers.sql
+mysql -u root -p minishop < database/data.sql
+```
 
-# Sécurité : le fichier config/database.php contient des informations locales sensibles. Il est exclu du suivi Git grâce au fichier .gitignore.
+> Tu peux aussi importer ces 4 fichiers, dans le même ordre, avec phpMyAdmin.
+
+**4. Configurer la connexion**
+
+Renseigne dans `config/database.php` les paramètres de ta base : hôte, nom de la base, utilisateur et mot de passe.
+
+>  Ce fichier contient des informations locales sensibles : il est exclu du suivi Git par le `.gitignore`. Ne le pousse jamais sur GitLab.
+
+**5. Lancer l'application**
+
+Configure ton serveur web pour qu'il serve `public/index.php`, ou utilise le serveur intégré de PHP :
+
+```bash
+php -S localhost:8000 -t public
+```
+
+Ouvre ensuite <http://localhost:8000> dans ton navigateur.
 
 ## Tests
 
-Les tests réalisés concernent notamment :
+Les tests réalisés portent sur :
 
-- La recherche de produits
+- la recherche de produits
+- la récupération des produits par catégorie
+- la consultation des commandes
+- les contraintes de prix et de stock
+- la vérification des transitions de statut
+- les procédures stockées et les triggers
 
-- La récupération des produits par catégorie
+Le détail des tests SQL est dans [`docs/tests-validation.md`](docs/tests-validation.md).
 
-- La consultation des commandes
+## Documentation
 
-- Les contraintes de prix et de stock
-
-- La vérification des transitions de statut
-
-- Les procédures stockées et les triggers
-
-Le détail des tests SQL est disponible dans docs/tests-validation.md.
+| Document | Contenu |
+|---|---|
+| [`docs/specification.md`](docs/specification.md) | Cahier des charges / spécification du système |
+| [`docs/tests-validation.md`](docs/tests-validation.md) | Tests SQL et validation |
 
 ## Organisation du travail
 
-Le projet est développé en binôme avec GitLab.
+Le projet est développé **en binôme** sur GitLab.
 
-Les fonctionnalités sont développées sur des branches dédiées, puis peuvent être intégrées après vérification.
-
-Exemple de branche :
-
-feature/minishop-mvc-panier
-
-Les commits sont organisés par fonctionnalité afin de conserver un historique clair.
+- Chaque fonctionnalité est développée sur une **branche dédiée** (exemple : `feature/minishop-mvc-panier`), puis intégrée après vérification.
+- Les commits sont organisés par fonctionnalité, avec des messages clairs (par exemple `feat: ajout du panier`, `fix: calcul du total`), afin de garder un historique lisible.
 
 ## État d'avancement
 
-Le catalogue et le panier sont fonctionnels.
-
-Les prochaines étapes concernent l'authentification, la validation des commandes et les fonctionnalités d'administration.
+- Catalogue fonctionnel
+- Panier fonctionnel
+- Authentification
+- Validation des commandes
+- Administration
 
 ## Contexte
 
-Projet universitaire — SAE, BUT Informatique.
+Projet universitaire : SAÉ, BUT Informatique.
