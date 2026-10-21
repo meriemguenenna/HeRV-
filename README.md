@@ -81,6 +81,7 @@ Le paiement bancaire réel n'est pas encore implémenté.
 
 ## Architecture du projet
 
+```text
 minishop/
 ├── app/
 │   ├── controllers/
@@ -110,6 +111,8 @@ minishop/
 │   └── index.php
 ├── .gitignore
 └── README.md
+
+```
 
 ## Installation et configuration
 
