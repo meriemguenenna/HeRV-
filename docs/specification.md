@@ -88,40 +88,99 @@ L'administrateur peut :
 
 ### 5.1 Diagramme de cas d'utilisation
 
-Le diagramme de cas d'utilisation doit représenter les trois acteurs principaux :
+Le diagramme de cas d'utilisation présente les différentes fonctionnalités de l'application MiniShop ainsi que les interactions entre les utilisateurs et le système.
 
-- Visiteur ;
-- Client ;
-- Administrateur.
+L'application comporte trois acteurs principaux :
 
-Les cas d'utilisation minimum à identifier sont :
+    Visiteur : il peut consulter le catalogue, rechercher et filtrer des produits, consulter les catégories et les fiches détaillées des produits, ainsi que créer un compte.
 
-1. Consulter le catalogue
-2. Rechercher un produit
-3. Consulter un produit
-4. Créer un compte
-5. Se connecter
-6. Gérer le panier
-7. Passer une commande
-8. Consulter l'historique des commandes
-9. Annuler une commande
-10. Gérer les produits
-11. Gérer les catégories
-12. Gérer les stocks
-13. Gérer les commandes
-14. Modifier le statut d'une commande
+    Client : il dispose des fonctionnalités de consultation du visiteur. Il peut également se connecter, se déconnecter, gérer son panier, passer une commande, consulter son historique de commandes, annuler une commande et modifier ses informations personnelles.
+
+    Administrateur : il est chargé de gérer les produits, les catégories, les stocks et les commandes, ainsi que de modifier le statut des commandes.
+
+Le diagramme représente 18 cas d'utilisation, couvrant les 14 cas minimum demandés dans le cahier des charges ainsi que des fonctionnalités complémentaires.
+
+![Diagramme de cas d'utilisation MiniShop](uml/cas-utilisation.png)
 
 ### 5.2 Documentation des cas d'utilisation
 
-Les cas d'utilisation doivent être documentés avec une description textuelle.
+Afin de préciser le fonctionnement de l'application MiniShop, trois cas d'utilisation ont été sélectionnés pour faire l'objet d'une description textuelle détaillée :
 
-Trois cas d'utilisation doivent être détaillés avec :
+Créer un compte : permet à un visiteur de s'inscrire sur l'application MiniShop.
 
-- l'acteur principal ;
-- les préconditions ;
-- le scénario nominal ;
-- les scénarios alternatifs ;
-- les erreurs éventuelles.
+Gérer le panier : permet à un client d'ajouter des produits à son panier, de modifier les quantités et de supprimer des produits.
+
+Gérer les produits : permet à un administrateur d'ajouter, de modifier et de supprimer des produits du catalogue.
+
+Pour chaque cas d'utilisation, la description précisera :
+
+l'acteur principal ;
+
+les préconditions ;
+
+le scénario nominal ;
+
+les scénarios alternatifs ;
+
+les erreurs éventuelles.
+
+Ces descriptions permettront de détailler les interactions entre les utilisateurs et le système ainsi que les règles à respecter lors de l'exécution des fonctionnalités.
+
+### 5.2.1 Cas d'utilisation : Créer un compte
+
+Acteur principal : Visiteur.
+
+Objectif : Permettre à un visiteur de créer un compte client afin d'accéder aux fonctionnalités réservées aux clients de MiniShop.
+
+Préconditions :
+
+    - Le visiteur peut accéder à la page d'inscription.
+
+    - Le visiteur ne possède pas déjà un compte associé à l'adresse email renseignée.
+
+Scénario nominal :
+
+    1- Le visiteur accède à la page d'inscription.
+
+    2- Le système affiche le formulaire de création de compte.
+
+    3- Le visiteur renseigne son nom, son prénom, son adresse email et son mot de passe.
+
+    4- Le visiteur valide le formulaire.
+
+    5- Le système vérifie que les champs obligatoires sont renseignés et que les données sont valides.
+
+    6- Le système vérifie que l'adresse email n'est pas déjà utilisée.
+
+    7- Le système sécurise le mot de passe à l'aide de password_hash().
+
+    8- Le système enregistre les informations du nouveau client dans la base de données.
+
+    9- Le système affiche un message confirmant la création du compte.
+
+Scénarios alternatifs :
+
+    A1 — Adresse email déjà utilisée : le système affiche un message d'erreur et demande au visiteur de saisir une autre adresse email.
+
+    A2 — Champs obligatoires manquants : le système signale les champs à compléter.
+
+    A3 — Données invalides : le système demande au visiteur de corriger les informations concernées.
+
+Erreurs possibles :
+
+    - Une erreur de connexion à la base de données empêche l'inscription.
+
+    - Une erreur survient pendant l'enregistrement du compte.
+
+Dans ces situations, le système affiche un message d'erreur sans divulguer d'informations techniques sensibles.
+
+Postconditions :
+
+    - Un nouveau compte client est enregistré dans la base de données.
+
+    - Le mot de passe est stocké sous forme de hachage.
+
+    - Le client peut désormais se connecter à MiniShop.
 
 ### 5.3 Diagramme de classes
 
