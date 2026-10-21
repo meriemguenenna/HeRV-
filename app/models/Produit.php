@@ -9,68 +9,29 @@ class Produit
         $this->pdo = $pdo;
     }
 
-    public function getAll(): array
+    public function getTousLesProduits(): array
     {
-        $sql = "SELECT 
-                    p.id_produit,
-                    p.nom,
-                    p.description,
-                    p.prix,
-                    p.stock,
-                    c.nom AS categorie
-                FROM PRODUIT p
-                JOIN CATEGORIE c 
-                    ON p.id_categorie = c.id_categorie
-                ORDER BY p.nom";
+        $sql = "SELECT id_produit, nom, description, prix, stock
+                FROM PRODUIT
+                WHERE actif = 1
+                ORDER BY id_produit";
 
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute();
+        $requete = $this->pdo->query($sql);
 
-        return $stmt->fetchAll();
+        return $requete->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    public function getById(int $id): ?array
+        public function getProduitParId(int $idProduit): ?array
     {
-        $sql = "SELECT 
-                    p.id_produit,
-                    p.nom,
-                    p.description,
-                    p.prix,
-                    p.stock,
-                    c.nom AS categorie
-                FROM PRODUIT p
-                JOIN CATEGORIE c 
-                    ON p.id_categorie = c.id_categorie
-                WHERE p.id_produit = :id";
+        $sql = "SELECT id_produit, nom, prix, stock
+                FROM PRODUIT
+                WHERE id_produit = :id
+                  AND actif = 1";
 
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(['id' => $id]);
+        $requete = $this->pdo->prepare($sql);
+        $requete->execute(['id' => $idProduit]);
 
-        $produit = $stmt->fetch();
+        $produit = $requete->fetch(PDO::FETCH_ASSOC);
 
         return $produit ?: null;
-    }
-
-    public function search(string $nom): array
-    {
-        $sql = "SELECT 
-                    p.id_produit,
-                    p.nom,
-                    p.description,
-                    p.prix,
-                    p.stock,
-                    c.nom AS categorie
-                FROM PRODUIT p
-                JOIN CATEGORIE c 
-                    ON p.id_categorie = c.id_categorie
-                WHERE p.nom LIKE :nom
-                ORDER BY p.nom";
-
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([
-            'nom' => '%' . $nom . '%'
-        ]);
-
-        return $stmt->fetchAll();
     }
 }
