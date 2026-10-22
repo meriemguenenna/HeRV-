@@ -25,10 +25,52 @@
         <a href="#produits">Boutique</a>
     </nav>
 
-    <div class="header-actions">
+    
+<div class="header-actions">
+
+    <?php if (!empty($_SESSION['client_id'])): ?>
+
+        <!-- Client connecté -->
         <span class="connexion-apercu">
-            <span aria-hidden="true">👤</span> Connexion
+            👤 Bonjour,
+            <?= htmlspecialchars(
+                $_SESSION['client_prenom'] ?? '',
+                ENT_QUOTES,
+                'UTF-8'
+            ) ?>
         </span>
+
+        <form action="index.php" method="POST" class="form-deconnexion">
+            <input type="hidden" name="action" value="deconnexion">
+
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="<?= htmlspecialchars(
+                    $_SESSION['csrf_token'],
+                    ENT_QUOTES,
+                    'UTF-8'
+                ) ?>"
+            >
+
+            <button type="submit" class="connexion-apercu bouton-deconnexion">
+                Déconnexion
+            </button>
+        </form>
+
+    <?php else: ?>
+
+        <!-- Visiteur non connecté -->
+        <a href="index.php?page=connexion" class="connexion-apercu">
+            👤 Connexion
+        </a>
+
+        <a href="index.php?page=inscription" class="connexion-apercu">
+            Inscription
+        </a>
+
+    <?php endif; ?>
+
 
         
 <a href="index.php?page=panier" class="panier-apercu">
