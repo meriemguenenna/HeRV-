@@ -1,0 +1,319 @@
+/* ==========================================================
+   MiniShop — Styles de l'espace administration
+   Complète style.css sans le modifier (classes préfixées admin-)
+   ========================================================== */
+
+:root {
+    --admin-violet: #6d28d9;
+    --admin-violet-fonce: #5b21b6;
+    --admin-violet-clair: #ede9fe;
+    --admin-texte: #1f2937;
+    --admin-gris: #6b7280;
+    --admin-bordure: #e5e7eb;
+    --admin-fond-carte: #ffffff;
+    --admin-vert: #15803d;
+    --admin-vert-clair: #dcfce7;
+    --admin-rouge: #b91c1c;
+    --admin-rouge-clair: #fee2e2;
+    --admin-orange: #b45309;
+    --admin-orange-clair: #fef3c7;
+    --admin-bleu: #1d4ed8;
+    --admin-bleu-clair: #dbeafe;
+}
+
+/* ----- Mise en page générale ----- */
+
+.admin-main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 20px 56px;
+}
+
+.admin-titre {
+    margin: 0 0 24px;
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+/* ----- Messages ----- */
+
+.admin-message {
+    margin: 0 0 20px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.admin-message-succes {
+    background: var(--admin-vert-clair);
+    color: var(--admin-vert);
+}
+
+.admin-message-erreur {
+    background: var(--admin-rouge-clair);
+    color: var(--admin-rouge);
+}
+
+/* ----- Cartes du tableau de bord ----- */
+
+.admin-cartes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.admin-carte {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 24px;
+    background: var(--admin-fond-carte);
+    color: var(--admin-texte);
+    border: 1px solid var(--admin-bordure);
+    border-radius: 16px;
+    text-decoration: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.admin-carte:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(109, 40, 217, 0.15);
+}
+
+.admin-carte-nombre {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--admin-violet);
+}
+
+.admin-carte-titre {
+    font-weight: 600;
+}
+
+.admin-carte-lien {
+    margin-top: 6px;
+    font-size: 0.9rem;
+    color: var(--admin-gris);
+}
+
+/* ----- Panneaux ----- */
+
+.admin-panneau {
+    margin-bottom: 28px;
+    padding: 24px;
+    background: var(--admin-fond-carte);
+    color: var(--admin-texte);
+    border: 1px solid var(--admin-bordure);
+    border-radius: 16px;
+}
+
+.admin-panneau h2 {
+    margin: 0 0 16px;
+    font-size: 1.3rem;
+}
+
+.admin-panneau h3 {
+    margin: 24px 0 10px;
+    font-size: 1.05rem;
+}
+
+.admin-panneau a {
+    color: var(--admin-violet);
+}
+
+.admin-aide {
+    margin: 12px 0 0;
+    font-size: 0.9rem;
+    color: var(--admin-gris);
+}
+
+/* ----- Formulaires ----- */
+
+.admin-formulaire {
+    display: grid;
+    gap: 14px;
+    max-width: 560px;
+}
+
+.admin-formulaire label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.admin-formulaire input,
+.admin-formulaire select,
+.admin-formulaire textarea,
+.admin-formulaire-inline input,
+.admin-formulaire-inline select {
+    padding: 10px 12px;
+    font: inherit;
+    color: var(--admin-texte);
+    background: #ffffff;
+    border: 1px solid var(--admin-bordure);
+    border-radius: 10px;
+}
+
+.admin-formulaire input:focus,
+.admin-formulaire select:focus,
+.admin-formulaire textarea:focus,
+.admin-formulaire-inline input:focus,
+.admin-formulaire-inline select:focus {
+    outline: 2px solid var(--admin-violet);
+    outline-offset: 1px;
+}
+
+.admin-formulaire-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+.admin-champ-stock {
+    width: 90px;
+}
+
+.admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* ----- Boutons ----- */
+
+.admin-bouton {
+    display: inline-block;
+    padding: 10px 18px;
+    font: inherit;
+    font-weight: 600;
+    color: #ffffff !important;
+    background: var(--admin-violet);
+    border: none;
+    border-radius: 10px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.admin-bouton:hover {
+    background: var(--admin-violet-fonce);
+}
+
+.admin-bouton-petit {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+}
+
+.admin-bouton-secondaire {
+    color: var(--admin-violet) !important;
+    background: var(--admin-violet-clair);
+}
+
+.admin-bouton-secondaire:hover {
+    background: #ddd6fe;
+}
+
+.admin-bouton-danger {
+    background: var(--admin-rouge);
+}
+
+.admin-bouton-danger:hover {
+    background: #991b1b;
+}
+
+.admin-bouton[disabled] {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* ----- Tableaux ----- */
+
+.admin-table-wrap {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--admin-bordure);
+    vertical-align: middle;
+}
+
+.admin-table th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--admin-gris);
+}
+
+.admin-table tfoot th {
+    font-size: 1rem;
+    color: var(--admin-texte);
+    text-transform: none;
+}
+
+.admin-cellule-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.admin-ligne-inactive td {
+    opacity: 0.55;
+}
+
+/* ----- Badges ----- */
+
+.admin-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 999px;
+}
+
+.admin-badge-ok {
+    color: var(--admin-vert);
+    background: var(--admin-vert-clair);
+}
+
+.admin-badge-off {
+    color: var(--admin-rouge);
+    background: var(--admin-rouge-clair);
+}
+
+.admin-badge-alerte {
+    color: var(--admin-orange);
+    background: var(--admin-orange-clair);
+}
+
+.admin-badge-info {
+    color: var(--admin-bleu);
+    background: var(--admin-bleu-clair);
+}
+
+/* ----- Petits écrans ----- */
+
+@media (max-width: 640px) {
+    .admin-main {
+        padding: 20px 12px 40px;
+    }
+
+    .admin-panneau {
+        padding: 16px;
+    }
+
+    .admin-titre {
+        font-size: 1.5rem;
+    }
+}
