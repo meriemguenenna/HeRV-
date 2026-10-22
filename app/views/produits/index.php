@@ -30,6 +30,11 @@
 
     <?php if (!empty($_SESSION['client_id'])): ?>
 
+
+        <a href="index.php?page=profil" class="connexion-apercu">
+            👤 Mon profil
+        </a>
+
         <!-- Client connecté -->
         <span class="connexion-apercu">
             👤 Bonjour,

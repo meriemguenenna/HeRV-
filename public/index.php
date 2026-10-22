@@ -173,6 +173,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+
+    // ----------------------------------------------
+    // 2.7 Modifier le profil du client
+    // ----------------------------------------------
+
+    if ($action === 'modifier_profil') {
+
+        $authController = new AuthController($pdo);
+        $authController->modifierProfil();
+        exit;
+    }
+
+
     // Refuser les actions POST inconnues
     http_response_code(400);
     exit('Action inconnue.');
@@ -218,6 +231,13 @@ switch ($page) {
         $controller = new AuthController($pdo);
         $controller->afficherConnexion();
         break;
+
+    
+case 'profil':
+    $controller = new AuthController($pdo);
+    $controller->afficherProfil();
+    break;
+    
 
     // Page inconnue
     default:

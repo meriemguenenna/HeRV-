@@ -65,4 +65,47 @@ class Client
 
         return $client ?: null;
     }
+
+    // Récupérer les informations du client connecté
+    public function trouverParId(int $idClient): ?array
+    {
+        $sql = "SELECT id_client, nom, prenom, email
+                FROM CLIENT
+                WHERE id_client = :id_client";
+
+        $requete = $this->pdo->prepare($sql);
+
+        $requete->execute([
+            'id_client' => $idClient
+        ]);
+
+        $client = $requete->fetch(PDO::FETCH_ASSOC);
+
+        return $client ?: null;
+    }
+
+    // Modifier les informations du client connecté
+    public function modifierProfil(
+        int $idClient,
+        string $nom,
+        string $prenom,
+        string $email
+    ): bool {
+        $sql = "UPDATE CLIENT
+                SET nom = :nom,
+                    prenom = :prenom,
+                    email = :email
+                WHERE id_client = :id_client";
+
+        $requete = $this->pdo->prepare($sql);
+
+        return $requete->execute([
+            'nom' => $nom,
+            'prenom' => $prenom,
+            'email' => $email,
+            'id_client' => $idClient
+        ]);
+    }
+
+
 }

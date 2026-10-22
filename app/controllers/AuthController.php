@@ -193,5 +193,122 @@ class AuthController
         exit;
     }
 
+    // Afficher le profil du client connecté
+    public function afficherProfil(): void
+    {
+        // Vérifier que le client est connecté
+        if (empty($_SESSION['client_id'])) {
+            header('Location: index.php?page=connexion', true, 303);
+            exit;
+        }
+
+        // Récupérer uniquement le profil du client connecté
+        $idClient = (int) $_SESSION['client_id'];
+        $client = $this->client->trouverParId($idClient);
+
+        if ($client === null) {
+            http_response_code(404);
+            echo 'Profil introuvable.';
+            return;
+        }
+
+        // Afficher la page profil
+        require __DIR__ . '/../views/compte/profil.php';
+    }
+
+    // Enregistrer les modifications du profil
+    public function modifierProfil(): void
+    {
+        // Vérifier que le client est connecté
+        if (empty($_SESSION['client_id'])) {
+            header('Location: index.php?page=connexion', true, 303);
+            exit;
+        }
+
+        // Vérifier le jeton CSRF
+        $jeton = is_string($_POST['csrf_token'] ?? null)
+            ? $_POST['csrf_token']
+            : '';
+
+        if (
+            empty($_SESSION['csrf_token'])
+            || !hash_equals($_SESSION['csrf_token'], $jeton)
+        ) {
+            http_response_code(403);
+            echo 'Requête non autorisée.';
+            return;
+        }
+
+        // Récupérer les informations saisies
+        $nom = is_string($_POST['nom'] ?? null)
+            ? trim($_POST['nom'])
+            : '';
+
+        $prenom = is_string($_POST['prenom'] ?? null)
+            ? trim($_POST['prenom'])
+            : '';
+
+        $email = is_string($_POST['email'] ?? null)
+            ? trim($_POST['email'])
+            : '';
+
+        $idClient = (int) $_SESSION['client_id'];
+        $erreurs = [];
+
+        // Valider les champs
+        if ($nom === '' || $prenom === '' || $email === '') {
+            $erreurs[] = 'Tous les champs sont obligatoires.';
+        }
+
+        if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $erreurs[] = 'Adresse e-mail invalide.';
+        }
+
+        try {
+            // Vérifier que l'adresse n'appartient pas à un autre client
+            $autreClient = $this->client->trouverParEmail($email);
+
+            if (
+                $autreClient !== null
+                && (int) $autreClient['id_client'] !== $idClient
+            ) {
+                $erreurs[] = 'Cette adresse e-mail est déjà utilisée.';
+            }
+
+            if (empty($erreurs)) {
+                $this->client->modifierProfil(
+                    $idClient,
+                    $nom,
+                    $prenom,
+                    $email
+                );
+
+                // Actualiser les informations de session
+                $_SESSION['client_nom'] = $nom;
+                $_SESSION['client_prenom'] = $prenom;
+
+                $_SESSION['message_succes'] =
+                    'Votre profil a été modifié avec succès.';
+
+                header('Location: index.php?page=profil', true, 303);
+                exit;
+            }
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+            $erreurs[] = 'Impossible de modifier le profil pour le moment.';
+        }
+
+        // Réafficher le profil avec les erreurs
+        $client = [
+            'nom' => $nom,
+            'prenom' => $prenom,
+            'email' => $email
+        ];
+
+        require __DIR__ . '/../views/compte/profil.php';
+    }
+
+
+
 
 }
