@@ -119,6 +119,32 @@
                 </p>
             </div>
 
+
+<form action="index.php" method="GET" class="form-recherche">
+    <input
+        type="hidden"
+        name="page"
+        value="accueil"
+    >
+
+    <input
+        type="search"
+        name="recherche"
+        placeholder="Rechercher un produit..."
+        aria-label="Rechercher un produit"
+        value="<?= htmlspecialchars($recherche ?? '', ENT_QUOTES, 'UTF-8') ?>"
+    >
+
+    <button type="submit">
+        🔎 Rechercher
+    </button>
+
+    <a href="index.php#produits">
+        Effacer
+    </a>
+</form>
+
+
             <?php if (empty($produits)): ?>
 
                 <p>Aucun produit disponible pour le moment.</p>

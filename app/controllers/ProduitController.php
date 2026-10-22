@@ -11,11 +11,22 @@ class ProduitController
         $this->produitModel = new Produit($pdo);
     }
 
-    public function index(): void
-    {
+   
+public function index(): void
+{
+    $recherche = trim(
+        is_string($_GET['recherche'] ?? null)
+            ? $_GET['recherche']
+            : ''
+    );
+
+    if ($recherche !== '') {
+        $produits = $this->produitModel->rechercherProduits($recherche);
+    } else {
         $produits = $this->produitModel->getTousLesProduits();
-
-
-        require __DIR__ . '/../views/produits/index.php';
     }
+
+    require __DIR__ . '/../views/produits/index.php';
+}
+
 }

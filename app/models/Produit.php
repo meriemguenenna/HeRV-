@@ -34,4 +34,16 @@ class Produit
 
         return $produit ?: null;
     }
+    public function rechercherProduits(string $nom): array
+{
+    $sql = "CALL rechercher_produit(:nom)";
+
+    $requete = $this->pdo->prepare($sql);
+    $requete->execute(['nom' => $nom]);
+
+    $produits = $requete->fetchAll(PDO::FETCH_ASSOC);
+    $requete->closeCursor();
+
+    return $produits;
+}
 }

@@ -794,3 +794,71 @@ a.connexion-apercu:hover {
     }
 }
 
+/* Barre de recherche du catalogue */
+
+.form-recherche {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 24px 0 32px;
+}
+
+.form-recherche input[type="search"] {
+    flex: 1;
+    min-width: 220px;
+    padding: 15px 20px;
+    border: 1px solid #e5d9fb;
+    border-radius: 30px;
+    background: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    outline: none;
+}
+
+.form-recherche input[type="search"]:focus {
+    border-color: #8054eb;
+    box-shadow: 0 0 0 3px #8054eb20;
+}
+
+.form-recherche button {
+    padding: 15px 24px;
+    border: none;
+    border-radius: 30px;
+    background: #8054eb;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.form-recherche button:hover {
+    background: #6d42db;
+}
+
+.form-recherche a {
+    color: #8054eb;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.form-recherche a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    .form-recherche {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .form-recherche input[type="search"],
+    .form-recherche button {
+        width: 100%;
+    }
+
+    .form-recherche a {
+        text-align: center;
+    }
+}
+
