@@ -862,3 +862,48 @@ a.connexion-apercu:hover {
     }
 }
 
+/* Filtres par catégorie */
+
+.filtres-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 0 0 32px;
+}
+
+.filtre-categorie {
+    display: inline-block;
+    padding: 12px 20px;
+    border: 1px solid #e5d9fb;
+    border-radius: 30px;
+    background: #fff;
+    color: #8054eb;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+}
+
+.filtre-categorie:hover {
+    background: #f1eaff;
+}
+
+.filtre-categorie.actif {
+    background: #8054eb;
+    color: #fff;
+    border-color: #8054eb;
+}
+
+@media (max-width: 600px) {
+    .filtres-categories {
+        gap: 8px;
+    }
+
+    .filtre-categorie {
+        padding: 10px 14px;
+        font-size: 12px;
+    }
+}
+
+

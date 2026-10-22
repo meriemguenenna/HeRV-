@@ -144,6 +144,31 @@
     </a>
 </form>
 
+<!-- Filtres par catégorie -->
+<div class="filtres-categories">
+
+    <a href="index.php?page=accueil#produits"
+       class="filtre-categorie <?= empty($idCategorie) ? 'actif' : '' ?>">
+        Tous les produits
+    </a>
+
+    <a href="index.php?page=accueil&categorie=1#produits"
+       class="filtre-categorie <?= $idCategorie === 1 ? 'actif' : '' ?>">
+        Informatique
+    </a>
+
+    <a href="index.php?page=accueil&categorie=2#produits"
+       class="filtre-categorie <?= $idCategorie === 2 ? 'actif' : '' ?>">
+        Téléphonie
+    </a>
+
+    <a href="index.php?page=accueil&categorie=3#produits"
+       class="filtre-categorie <?= $idCategorie === 3 ? 'actif' : '' ?>">
+        Accessoires
+    </a>
+
+</div>
+
 
             <?php if (empty($produits)): ?>
 
@@ -154,13 +179,25 @@
                 <div class="produits-grid">
 
                     <?php
-                    $images = [
-                        1 => 'ordinateur.jpg',
-                        2 => 'souris.jpg',
-                        3 => 'clavier.jpg',
-                        4 => 'iphone.jpg',
-                        5 => 'casque.jpg'
-                    ];
+                    
+$images = [
+    1  => 'ordinateur.jpg',
+    2  => 'souris.jpg',
+    3  => 'clavier.jpg',
+    4  => 'iphone.jpg',
+    5  => 'casque.jpg',
+    6  => 'ecran.jpg',
+    7  => 'webcam.jpg',
+    8  => 'ssd.jpg',
+    9  => 'ordinateur-bureau.jpg',
+    10 => 'coque.jpg',
+    11 => 'chargeur.jpg',
+    12 => 'batterie.jpg',
+    13 => 'support.jpg',
+    14 => 'tapis.jpg',
+    15 => 'hub-usb.jpg'
+];
+
                     ?>
 
                     <?php foreach ($produits as $produit): ?>

@@ -46,4 +46,21 @@ class Produit
 
     return $produits;
 }
+
+public function getProduitsParCategorie(int $idCategorie): array
+{
+    $requete = $this->pdo->prepare(
+        "CALL produits_par_categorie(:id_categorie)"
+    );
+
+    $requete->execute([
+        'id_categorie' => $idCategorie
+    ]);
+
+    $produits = $requete->fetchAll(PDO::FETCH_ASSOC);
+    $requete->closeCursor();
+
+    return $produits;
+}
+
 }
