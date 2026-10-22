@@ -906,4 +906,131 @@ a.connexion-apercu:hover {
     }
 }
 
+/* Liens vers les fiches produits */
+.lien-detail-produit {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.lien-detail-produit:hover {
+    color: #8054eb;
+    text-decoration: underline;
+}
+
+.lien-detail-produit:focus-visible {
+    color: #8054eb;
+    outline: 2px solid #8054eb;
+    outline-offset: 4px;
+    border-radius: 3px;
+}
+
+/* Page détail produit */
+.detail-produit {
+    max-width: 1150px;
+    margin: 60px auto;
+    padding: 0 24px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.retour-catalogue {
+    display: inline-block;
+    margin-bottom: 35px;
+    color: #8054eb;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.retour-catalogue:hover {
+    text-decoration: underline;
+}
+
+.detail-contenu {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 55px;
+}
+
+.detail-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    padding: 30px;
+    background: #f8f5ff;
+    border-radius: 24px;
+}
+
+.detail-image img {
+    width: 100%;
+    max-height: 380px;
+    object-fit: contain;
+    border-radius: 15px;
+}
+
+.detail-informations h1 {
+    margin-bottom: 20px;
+    font-size: 36px;
+    color: #252033;
+}
+
+.detail-description {
+    margin-bottom: 25px;
+    color: #6b6478;
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+.detail-prix {
+    margin-bottom: 18px;
+    color: #8054eb;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.detail-stock {
+    margin-bottom: 30px;
+    color: #3e8b63;
+    font-weight: 600;
+}
+
+.btn-ajouter-detail {
+    padding: 16px 32px;
+    background: #8054eb;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-ajouter-detail:hover {
+    background: #6d42db;
+}
+
+/* Adaptation aux petits écrans */
+@media (max-width: 768px) {
+    .detail-contenu {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .detail-image {
+        min-height: 280px;
+    }
+
+    .detail-informations h1 {
+        font-size: 28px;
+    }
+
+    .detail-prix {
+        font-size: 27px;
+    }
+}
+
+
 

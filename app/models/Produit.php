@@ -22,10 +22,12 @@ class Produit
     }
         public function getProduitParId(int $idProduit): ?array
     {
-        $sql = "SELECT id_produit, nom, prix, stock
-                FROM PRODUIT
-                WHERE id_produit = :id
-                  AND actif = 1";
+        
+$sql = "SELECT id_produit, nom, description, prix, stock
+ FROM PRODUIT 
+ WHERE id_produit = :id 
+ AND actif = 1";
+
 
         $requete = $this->pdo->prepare($sql);
         $requete->execute(['id' => $idProduit]);

@@ -193,6 +193,14 @@ switch ($page) {
         $controller->index();
         break;
 
+
+    // Détail d'un produit
+    case 'detail':
+        $controller = new ProduitController($pdo);
+        $controller->detail();
+        break;
+
+
     // Panier
     case 'panier':
         $controller = new PanierController($pdo);

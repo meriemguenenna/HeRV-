@@ -232,9 +232,16 @@ $images = [
                                     COLLECTION TECH
                                 </span>
 
-                                <h3>
-                                    <?= htmlspecialchars($produit['nom'], ENT_QUOTES, 'UTF-8') ?>
-                                </h3>
+                                
+<h3>
+    <a
+        href="index.php?page=detail&id=<?= $id ?>"
+        class="lien-detail-produit"
+    >
+        <?= htmlspecialchars($produit['nom'], ENT_QUOTES, 'UTF-8') ?>
+    </a>
+</h3>
+
 
                                 <p class="produit-description">
                                     <?= htmlspecialchars($produit['description'] ?? '', ENT_QUOTES, 'UTF-8') ?>

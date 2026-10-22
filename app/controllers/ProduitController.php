@@ -45,5 +45,35 @@ public function index(): void
     require __DIR__ . '/../views/produits/index.php';
 }
 
+public function detail(): void
+{
+    // Récupérer et vérifier l'identifiant du produit
+    $idProduit = filter_var(
+        $_GET['id'] ?? null,
+        FILTER_VALIDATE_INT,
+        ['options' => ['min_range' => 1]]
+    );
+
+    if ($idProduit === false || $idProduit === null) {
+        http_response_code(404);
+        echo 'Produit introuvable.';
+        return;
+    }
+
+    // Récupérer le produit depuis la base de données
+    $produit = $this->produitModel->getProduitParId($idProduit);
+
+    if ($produit === null) {
+        http_response_code(404);
+        echo 'Produit introuvable.';
+        return;
+    }
+
+    // Afficher la page détail
+    require __DIR__ . '/../views/produits/detail.php';
+}
+
+
+
 
 }
