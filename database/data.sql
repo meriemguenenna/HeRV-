@@ -31,7 +31,49 @@ VALUES
 
 ('Casque audio',
  'Casque audio avec connexion sans fil.',
- 79.99, 20, TRUE, 3);
+ 79.99, 20, TRUE, 3),
+
+('Écran 24 pouces',
+ 'Écran pour ordinateur de 24 pouces.',
+ 149.99, 12, TRUE, 1),
+
+('Webcam HD',
+ 'Webcam haute définition pour les appels vidéo.',
+ 39.99, 18, TRUE, 1),
+
+('Disque SSD externe',
+ 'Disque SSD externe pour stocker les fichiers.',
+ 69.99, 14, TRUE, 1),
+
+('Ordinateur de bureau',
+ 'Ordinateur fixe pour le travail et les études.',
+ 649.99, 6, TRUE, 1),
+
+('Coque de téléphone',
+ 'Coque de protection pour smartphone.',
+ 14.99, 30, TRUE, 2),
+
+('Chargeur USB-C',
+ 'Chargeur USB-C pour appareils compatibles.',
+ 19.99, 25, TRUE, 2),
+
+('Batterie externe',
+ 'Batterie portable pour recharger les appareils.',
+ 34.99, 16, TRUE, 2),
+
+('Support téléphone',
+ 'Support pratique pour poser un smartphone.',
+ 12.99, 22, TRUE, 2),
+
+('Tapis de souris',
+ 'Tapis de souris pour bureau.',
+ 9.99, 35, TRUE, 3),
+
+('Hub USB',
+ 'Adaptateur USB pour connecter plusieurs appareils.',
+ 24.99, 19, TRUE, 3);
+
+
 
 -- 3. Clients et administrateur
 -- Mots de passe hachés avec password_hash() en PHP

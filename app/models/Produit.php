@@ -22,10 +22,12 @@ class Produit
     }
         public function getProduitParId(int $idProduit): ?array
     {
-        $sql = "SELECT id_produit, nom, prix, stock
-                FROM PRODUIT
-                WHERE id_produit = :id
-                  AND actif = 1";
+        
+$sql = "SELECT id_produit, nom, description, prix, stock
+ FROM PRODUIT 
+ WHERE id_produit = :id 
+ AND actif = 1";
+
 
         $requete = $this->pdo->prepare($sql);
         $requete->execute(['id' => $idProduit]);
@@ -34,4 +36,33 @@ class Produit
 
         return $produit ?: null;
     }
+    public function rechercherProduits(string $nom): array
+{
+    $sql = "CALL rechercher_produit(:nom)";
+
+    $requete = $this->pdo->prepare($sql);
+    $requete->execute(['nom' => $nom]);
+
+    $produits = $requete->fetchAll(PDO::FETCH_ASSOC);
+    $requete->closeCursor();
+
+    return $produits;
+}
+
+public function getProduitsParCategorie(int $idCategorie): array
+{
+    $requete = $this->pdo->prepare(
+        "CALL produits_par_categorie(:id_categorie)"
+    );
+
+    $requete->execute([
+        'id_categorie' => $idCategorie
+    ]);
+
+    $produits = $requete->fetchAll(PDO::FETCH_ASSOC);
+    $requete->closeCursor();
+
+    return $produits;
+}
+
 }
