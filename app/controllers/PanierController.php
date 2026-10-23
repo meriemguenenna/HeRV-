@@ -75,7 +75,19 @@ public function index(): void
         $total += $sousTotal;
     }
 
+    
+if (($_GET['page'] ?? '') === 'validation_commande') {
+    if (empty($produitsPanier)) {
+        $_SESSION['erreur'] = 'Votre panier est vide.';
+        header('Location: index.php?page=panier', true, 303);
+        exit;
+    }
+
+    require __DIR__ . '/../views/commandes/validation.php';
+} else {
     require __DIR__ . '/../views/panier/index.php';
+}
+
 }
 
 public function supprimer(int $idProduit): void
