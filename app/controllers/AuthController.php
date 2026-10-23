@@ -10,6 +10,10 @@ class AuthController
         $this->client = new Client($pdo);
     }
 
+    // --------------------------------------------------
+    // Inscription
+    // --------------------------------------------------
+
     public function afficherInscription(): void
     {
         $erreurs = [];
@@ -20,7 +24,6 @@ class AuthController
 
     public function inscrire(): void
     {
-        
         // Récupérer uniquement des chaînes de caractères
         $nom = is_string($_POST['nom'] ?? null)
             ? trim($_POST['nom'])
@@ -42,27 +45,41 @@ class AuthController
             ? $_POST['confirmation']
             : '';
 
-
         $erreurs = [];
 
-        if ($nom === '' || $prenom === '' || $email === ''
-            || $motDePasse === '' || $confirmation === '') {
+        if (
+            $nom === ''
+            || $prenom === ''
+            || $email === ''
+            || $motDePasse === ''
+            || $confirmation === ''
+        ) {
             $erreurs[] = 'Tous les champs sont obligatoires.';
         }
 
-        if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (
+            $email !== ''
+            && !filter_var($email, FILTER_VALIDATE_EMAIL)
+        ) {
             $erreurs[] = 'Adresse e-mail invalide.';
         }
 
-        if ($motDePasse !== '' && strlen($motDePasse) < 8) {
-            $erreurs[] = 'Le mot de passe doit contenir au moins 8 caractères.';
+        if (
+            $motDePasse !== ''
+            && strlen($motDePasse) < 8
+        ) {
+            $erreurs[] =
+                'Le mot de passe doit contenir au moins 8 caractères.';
         }
 
         if ($motDePasse !== $confirmation) {
             $erreurs[] = 'Les mots de passe ne correspondent pas.';
         }
 
-        if (empty($erreurs) && $this->client->emailExiste($email)) {
+        if (
+            empty($erreurs)
+            && $this->client->emailExiste($email)
+        ) {
             $erreurs[] = 'Cette adresse e-mail est déjà utilisée.';
         }
 
@@ -86,7 +103,9 @@ class AuthController
             );
 
             if (!$inscriptionReussie) {
-                throw new RuntimeException('Inscription non enregistrée.');
+                throw new RuntimeException(
+                    'Inscription non enregistrée.'
+                );
             }
 
             $_SESSION['message_succes'] =
@@ -97,16 +116,24 @@ class AuthController
 
         } catch (PDOException $e) {
             error_log($e->getMessage());
-            $erreurs[] = 'Impossible de créer le compte pour le moment.';
+
+            $erreurs[] =
+                'Impossible de créer le compte pour le moment.';
+
         } catch (RuntimeException $e) {
             error_log($e->getMessage());
-            $erreurs[] = 'Impossible de créer le compte pour le moment.';
+
+            $erreurs[] =
+                'Impossible de créer le compte pour le moment.';
         }
 
         require __DIR__ . '/../views/auth/inscription.php';
     }
-    
-    // Afficher le formulaire de connexion
+
+    // --------------------------------------------------
+    // Connexion
+    // --------------------------------------------------
+
     public function afficherConnexion(): void
     {
         $erreur = '';
@@ -115,12 +142,8 @@ class AuthController
         require __DIR__ . '/../views/auth/connexion.php';
     }
 
-    // Vérifier les identifiants du client
-    
-    // Vérifier les identifiants du client
     public function connecter(): void
     {
-        
         // Accepter uniquement des chaînes de caractères
         $email = is_string($_POST['email'] ?? null)
             ? trim($_POST['email'])
@@ -149,32 +172,68 @@ class AuthController
                         $client['password']
                     )
                 ) {
-                    $erreur = 'Adresse e-mail ou mot de passe incorrect.';
+                    $erreur =
+                        'Adresse e-mail ou mot de passe incorrect.';
                 } else {
+
                     // Renouveler l'identifiant de session
                     session_regenerate_id(true);
 
                     // Enregistrer les informations du client
-                    $_SESSION['client_id'] = (int) $client['id_client'];
-                    $_SESSION['client_nom'] = $client['nom'];
-                    $_SESSION['client_prenom'] = $client['prenom'];
-                    $_SESSION['client_role'] = $client['role'];
+                    $_SESSION['client_id'] =
+                        (int) $client['id_client'];
 
-                    header('Location: index.php', true, 303);
+                    $_SESSION['client_nom'] =
+                        $client['nom'];
+
+                    $_SESSION['client_prenom'] =
+                        $client['prenom'];
+
+                    $_SESSION['client_role'] =
+                        $client['role'];
+
+                    // --------------------------------------
+                    // REDIRECTION SELON LE RÔLE
+                    // --------------------------------------
+
+                    if ($client['role'] === 'admin') {
+
+                        // Administrateur : tableau de bord
+                        header(
+                            'Location: index.php?page=admin',
+                            true,
+                            303
+                        );
+
+                    } else {
+
+                        // Client : catalogue MiniShop
+                        header(
+                            'Location: index.php',
+                            true,
+                            303
+                        );
+                    }
+
                     exit;
                 }
+
             } catch (PDOException $e) {
-                // Journaliser l'erreur sans afficher les détails SQL
+                // Ne pas afficher les détails SQL
                 error_log($e->getMessage());
-                $erreur = 'Connexion momentanément indisponible.';
+
+                $erreur =
+                    'Connexion momentanément indisponible.';
             }
         }
 
         require __DIR__ . '/../views/auth/connexion.php';
     }
 
-    
-    // Déconnecter le client
+    // --------------------------------------------------
+    // Déconnexion
+    // --------------------------------------------------
+
     public function deconnecter(): void
     {
         // Supprimer les informations d'authentification
@@ -193,17 +252,25 @@ class AuthController
         exit;
     }
 
-    // Afficher le profil du client connecté
+    // --------------------------------------------------
+    // Affichage du profil
+    // --------------------------------------------------
+
     public function afficherProfil(): void
     {
         // Vérifier que le client est connecté
         if (empty($_SESSION['client_id'])) {
-            header('Location: index.php?page=connexion', true, 303);
+            header(
+                'Location: index.php?page=connexion',
+                true,
+                303
+            );
             exit;
         }
 
         // Récupérer uniquement le profil du client connecté
         $idClient = (int) $_SESSION['client_id'];
+
         $client = $this->client->trouverParId($idClient);
 
         if ($client === null) {
@@ -216,12 +283,19 @@ class AuthController
         require __DIR__ . '/../views/compte/profil.php';
     }
 
-    // Enregistrer les modifications du profil
+    // --------------------------------------------------
+    // Modification du profil
+    // --------------------------------------------------
+
     public function modifierProfil(): void
     {
         // Vérifier que le client est connecté
         if (empty($_SESSION['client_id'])) {
-            header('Location: index.php?page=connexion', true, 303);
+            header(
+                'Location: index.php?page=connexion',
+                true,
+                303
+            );
             exit;
         }
 
@@ -232,7 +306,10 @@ class AuthController
 
         if (
             empty($_SESSION['csrf_token'])
-            || !hash_equals($_SESSION['csrf_token'], $jeton)
+            || !hash_equals(
+                $_SESSION['csrf_token'],
+                $jeton
+            )
         ) {
             http_response_code(403);
             echo 'Requête non autorisée.';
@@ -253,29 +330,41 @@ class AuthController
             : '';
 
         $idClient = (int) $_SESSION['client_id'];
+
         $erreurs = [];
 
         // Valider les champs
-        if ($nom === '' || $prenom === '' || $email === '') {
+        if (
+            $nom === ''
+            || $prenom === ''
+            || $email === ''
+        ) {
             $erreurs[] = 'Tous les champs sont obligatoires.';
         }
 
-        if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (
+            $email !== ''
+            && !filter_var($email, FILTER_VALIDATE_EMAIL)
+        ) {
             $erreurs[] = 'Adresse e-mail invalide.';
         }
 
         try {
-            // Vérifier que l'adresse n'appartient pas à un autre client
-            $autreClient = $this->client->trouverParEmail($email);
+            // Vérifier que l'adresse n'appartient
+            // pas à un autre client
+            $autreClient =
+                $this->client->trouverParEmail($email);
 
             if (
                 $autreClient !== null
                 && (int) $autreClient['id_client'] !== $idClient
             ) {
-                $erreurs[] = 'Cette adresse e-mail est déjà utilisée.';
+                $erreurs[] =
+                    'Cette adresse e-mail est déjà utilisée.';
             }
 
             if (empty($erreurs)) {
+
                 $this->client->modifierProfil(
                     $idClient,
                     $nom,
@@ -290,12 +379,19 @@ class AuthController
                 $_SESSION['message_succes'] =
                     'Votre profil a été modifié avec succès.';
 
-                header('Location: index.php?page=profil', true, 303);
+                header(
+                    'Location: index.php?page=profil',
+                    true,
+                    303
+                );
                 exit;
             }
+
         } catch (PDOException $e) {
             error_log($e->getMessage());
-            $erreurs[] = 'Impossible de modifier le profil pour le moment.';
+
+            $erreurs[] =
+                'Impossible de modifier le profil pour le moment.';
         }
 
         // Réafficher le profil avec les erreurs
@@ -307,8 +403,4 @@ class AuthController
 
         require __DIR__ . '/../views/compte/profil.php';
     }
-
-
-
-
 }
