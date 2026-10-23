@@ -81,6 +81,7 @@ BEGIN
             (nom, description, prix, stock, actif, id_categorie)
         VALUES
             (TRIM(p_nom), p_description, p_prix, p_stock, TRUE, p_id_categorie);
+        SELECT LAST_INSERT_ID() AS id_produit;
     END IF;
 END //
 

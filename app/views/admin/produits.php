@@ -14,7 +14,7 @@ $modeEdition = $produitEdition !== null;
 
     <h2><?= $modeEdition ? 'Modifier le produit' : 'Ajouter un produit' ?></h2>
 
-    <form action="index.php" method="POST" class="admin-formulaire">
+    <form action="index.php" method="POST" enctype="multipart/form-data" class="admin-formulaire">
 
         <input
             type="hidden"
@@ -91,6 +91,26 @@ $modeEdition = $produitEdition !== null;
             </select>
         </label>
 
+        
+        <!-- Photo du produit -->
+        <label>
+            Photo du produit
+            <input
+                type="file"
+                name="image_produit"
+                accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+            >
+        </label>
+
+        <p class="admin-aide">
+            Formats acceptés : JPG, PNG ou WebP.
+            Taille maximale : 2 Mo.
+            <?php if ($modeEdition): ?>
+                Si vous ne choisissez aucune image, la photo actuelle sera conservée.
+            <?php endif; ?>
+        </p>
+
+
         <div class="admin-actions">
             <button type="submit" class="admin-bouton">
                 <?= $modeEdition ? 'Enregistrer les modifications' : 'Ajouter le produit' ?>
@@ -129,6 +149,7 @@ $modeEdition = $produitEdition !== null;
                 <thead>
                     <tr>
                         <th>N°</th>
+                        <th>Photo</th>
                         <th>Nom</th>
                         <th>Catégorie</th>
                         <th>Prix</th>
@@ -142,6 +163,21 @@ $modeEdition = $produitEdition !== null;
                         <?php $actif = (int) $produit['actif'] === 1; ?>
                         <tr class="<?= $actif ? '' : 'admin-ligne-inactive' ?>">
                             <td><?= (int) $produit['id_produit'] ?></td>
+                            
+<td>
+    <?php if (!empty($produit['image'])): ?>
+        <img
+            src="images/<?= htmlspecialchars(basename($produit['image']), ENT_QUOTES, 'UTF-8') ?>"
+            alt="Photo de <?= htmlspecialchars($produit['nom'], ENT_QUOTES, 'UTF-8') ?>"
+            width="60"
+            height="60"
+            style="object-fit: contain; border-radius: 6px;"
+        >
+    <?php else: ?>
+        <span>Pas de photo</span>
+    <?php endif; ?>
+</td>
+
                             <td><?= echapper($produit['nom']) ?></td>
                             <td><?= echapper($produit['categorie']) ?></td>
                             <td><?= number_format((float) $produit['prix'], 2, ',', ' ') ?> €</td>
@@ -160,7 +196,7 @@ $modeEdition = $produitEdition !== null;
                                     Modifier
                                 </a>
 
-                                <form action="index.php" method="POST" class="admin-formulaire-inline">
+                                <form action="index.php" method="POST" class="admin-formulaire">
                                     <input type="hidden" name="action" value="admin_etat_produit">
                                     <input type="hidden" name="id_produit" value="<?= (int) $produit['id_produit'] ?>">
                                     <input type="hidden" name="actif" value="<?= $actif ? '0' : '1' ?>">

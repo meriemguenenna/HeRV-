@@ -25,7 +25,7 @@ class ProduitAdmin
     public function trouverParId(int $idProduit): ?array
     {
         $sql = "SELECT id_produit, nom, description, prix,
-                       stock, actif, id_categorie
+                       stock, actif, id_categorie, image
                 FROM PRODUIT
                 WHERE id_produit = :id_produit";
 
@@ -37,14 +37,15 @@ class ProduitAdmin
         return $produit ?: null;
     }
 
-    // Ajouter un produit (procédure stockée)
+    
+    // Ajouter un produit et récupérer son identifiant
     public function ajouter(
         string $nom,
         string $description,
         string $prix,
         int $stock,
         int $idCategorie
-    ): void {
+    ): int {
         $requete = $this->pdo->prepare(
             "CALL ajouter_produit(
                 :nom, :description, :prix, :stock, :id_categorie
@@ -59,8 +60,22 @@ class ProduitAdmin
             'id_categorie' => $idCategorie
         ]);
 
-        $requete->closeCursor();
+        
+$resultat = $requete->fetch(PDO::FETCH_ASSOC);
+$requete->closeCursor();
+
+$idProduit = (int) ($resultat['id_produit'] ?? 0);
+
+
+        if ($idProduit <= 0) {
+            throw new RuntimeException(
+                "Impossible de récupérer l'identifiant du nouveau produit."
+            );
+        }
+
+        return $idProduit;
     }
+
 
     // Modifier un produit (procédure stockée)
     public function modifier(
@@ -116,4 +131,40 @@ class ProduitAdmin
 
         $requete->closeCursor();
     }
+
+    
+    // Associer ou remplacer la photo d'un produit
+    // (procédure stockée modifier_image_produit)
+    public function modifierImage(int $idProduit, string $nomImage): void
+    {
+        $requete = $this->pdo->prepare(
+            "CALL modifier_image_produit(:id_produit, :image)"
+        );
+
+        $requete->execute([
+            'id_produit' => $idProduit,
+            'image' => $nomImage
+        ]);
+
+        $requete->closeCursor();
+    }
+    
+public function commencerTransaction(): void
+{
+    $this->pdo->beginTransaction();
+}
+
+public function validerTransaction(): void
+{
+    $this->pdo->commit();
+}
+
+public function annulerTransaction(): void
+{
+    if ($this->pdo->inTransaction()) {
+        $this->pdo->rollBack();
+    }
+}
+
+
 }

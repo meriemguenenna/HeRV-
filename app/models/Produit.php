@@ -9,24 +9,47 @@ class Produit
         $this->pdo = $pdo;
     }
 
-    public function getTousLesProduits(): array
-    {
-        $sql = "SELECT id_produit, nom, description, prix, stock
-                FROM PRODUIT
-                WHERE actif = 1
-                ORDER BY id_produit";
 
-        $requete = $this->pdo->query($sql);
 
-        return $requete->fetchAll(PDO::FETCH_ASSOC);
+public function commencerTransaction(): void
+{
+    $this->pdo->beginTransaction();
+}
+
+public function validerTransaction(): void
+{
+    $this->pdo->commit();
+}
+
+public function annulerTransaction(): void
+{
+    if ($this->pdo->inTransaction()) {
+        $this->pdo->rollBack();
     }
+}
+
+
+
+public function getTousLesProduits(): array
+{
+    $sql = "SELECT id_produit, nom, description, prix, stock, image
+            FROM PRODUIT
+            WHERE actif = 1
+            ORDER BY id_produit";
+
+    $requete = $this->pdo->query($sql);
+
+    return $requete->fetchAll(PDO::FETCH_ASSOC);
+}
+
         public function getProduitParId(int $idProduit): ?array
     {
-        
-$sql = "SELECT id_produit, nom, description, prix, stock
- FROM PRODUIT 
- WHERE id_produit = :id 
- AND actif = 1";
+
+
+$sql = "SELECT id_produit, nom, description, prix, stock, image
+        FROM PRODUIT
+        WHERE id_produit = :id
+        AND actif = 1";
 
 
         $requete = $this->pdo->prepare($sql);

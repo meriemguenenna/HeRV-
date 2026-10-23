@@ -15,7 +15,10 @@
 <body>
 
     <!-- Barre de navigation -->
-    <header class="site-header">
+    
+<!-- Barre de navigation -->
+<header class="site-header">
+
     <a href="index.php" class="logo">
         MiniShop <span>✦</span>
     </a>
@@ -23,71 +26,80 @@
     <nav class="navigation" aria-label="Navigation principale">
         <a href="index.php" class="nav-active">Accueil</a>
         <a href="#produits">Boutique</a>
+
+        <!-- Lien visible uniquement pour les administrateurs -->
+        <?php if (
+            !empty($_SESSION['client_id'])
+            && ($_SESSION['client_role'] ?? '') === 'admin'
+        ): ?>
+            <a href="index.php?page=admin">
+                Administration
+            </a>
+        <?php endif; ?>
     </nav>
 
-    
-<div class="header-actions">
+    <div class="header-actions">
 
-    <?php if (!empty($_SESSION['client_id'])): ?>
+        <?php if (!empty($_SESSION['client_id'])): ?>
 
+            <a href="index.php?page=profil" class="connexion-apercu">
+                👤 Mon profil
+            </a>
 
-        <a href="index.php?page=profil" class="connexion-apercu">
-            👤 Mon profil
-        </a>
-
-        <!-- Client connecté -->
-        <span class="connexion-apercu">
-            👤 Bonjour,
-            <?= htmlspecialchars(
-                $_SESSION['client_prenom'] ?? '',
-                ENT_QUOTES,
-                'UTF-8'
-            ) ?>
-        </span>
-
-        <form action="index.php" method="POST" class="form-deconnexion">
-            <input type="hidden" name="action" value="deconnexion">
-
-            <input
-                type="hidden"
-                name="csrf_token"
-                value="<?= htmlspecialchars(
-                    $_SESSION['csrf_token'],
+            <span class="connexion-apercu">
+                👤 Bonjour,
+                <?= htmlspecialchars(
+                    $_SESSION['client_prenom'] ?? '',
                     ENT_QUOTES,
                     'UTF-8'
-                ) ?>"
-            >
+                ) ?>
+            </span>
 
-            <button type="submit" class="connexion-apercu bouton-deconnexion">
-                Déconnexion
-            </button>
-        </form>
+            <form action="index.php" method="POST" class="form-deconnexion">
+                <input type="hidden" name="action" value="deconnexion">
 
-    <?php else: ?>
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="<?= htmlspecialchars(
+                        $_SESSION['csrf_token'],
+                        ENT_QUOTES,
+                        'UTF-8'
+                    ) ?>"
+                >
 
-        <!-- Visiteur non connecté -->
-        <a href="index.php?page=connexion" class="connexion-apercu">
-            👤 Connexion
+                <button
+                    type="submit"
+                    class="connexion-apercu bouton-deconnexion"
+                >
+                    Déconnexion
+                </button>
+            </form>
+
+        <?php else: ?>
+
+            <a href="index.php?page=connexion" class="connexion-apercu">
+                👤 Connexion
+            </a>
+
+            <a href="index.php?page=inscription" class="connexion-apercu">
+                Inscription
+            </a>
+
+        <?php endif; ?>
+
+        <a href="index.php?page=panier" class="panier-apercu">
+            <span aria-hidden="true">🛒</span>
+            Panier
+
+            <span class="panier-compteur">
+                <?= array_sum($_SESSION['panier'] ?? []) ?>
+            </span>
         </a>
-
-        <a href="index.php?page=inscription" class="connexion-apercu">
-            Inscription
-        </a>
-
-    <?php endif; ?>
-
-
-        
-<a href="index.php?page=panier" class="panier-apercu">
-    <span aria-hidden="true">🛒</span>
-    Panier
-    <span class="panier-compteur">
-        <?= array_sum($_SESSION['panier'] ?? []) ?>
-    </span>
-</a>
 
     </div>
 </header>
+
 
     <main>
 
@@ -209,7 +221,7 @@ $images = [
 
                         <?php
                         $id = (int) $produit['id_produit'];
-                        $image = $images[$id] ?? null;
+                        $image = $produit['image'] ?? null;
                         $stock = (int) $produit['stock'];
                         ?>
 

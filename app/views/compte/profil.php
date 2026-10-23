@@ -61,6 +61,80 @@ $email = htmlspecialchars($client['email'], ENT_QUOTES, 'UTF-8');
         .profil-retour:hover {
             background: #5b21b6;
         }
+        
+/* Formulaire de modification du profil */
+
+.profil-container h2 {
+    margin-top: 45px;
+    margin-bottom: 24px;
+    color: #21183c;
+    font-size: 26px;
+}
+
+.form-profil {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.form-profil label {
+    display: block;
+    margin-top: 8px;
+    color: #444;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.form-profil input[type="text"],
+.form-profil input[type="email"] {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px 16px;
+    border: 1px solid #ddd6fe;
+    border-radius: 9px;
+    background: #f5f3ff;
+    color: #21183c;
+    font: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-profil input:focus {
+    outline: none;
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+}
+
+.form-profil button[type="submit"] {
+    align-self: flex-start;
+    margin-top: 18px;
+    padding: 14px 22px;
+    border: none;
+    border-radius: 9px;
+    background: #6d28d9;
+    color: white;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.form-profil button[type="submit"]:hover {
+    background: #5b21b6;
+}
+
+@media (max-width: 600px) {
+    .profil-container {
+        margin: 20px 12px;
+        padding: 24px 18px;
+    }
+
+    .form-profil button[type="submit"] {
+        width: 100%;
+    }
+}
+
     </style>
 </head>
 <body>

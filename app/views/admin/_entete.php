@@ -1,3 +1,4 @@
+
 <?php
 
 // En-tête commun à toutes les pages d'administration.
@@ -52,6 +53,8 @@ $menuAdmin = [
 
     <!-- Barre de navigation administration -->
     <header class="site-header">
+
+        <!-- Retour au tableau de bord -->
         <a href="index.php?page=admin" class="logo">
             MiniShop <span>✦</span> Admin
         </a>
@@ -69,19 +72,31 @@ $menuAdmin = [
 
         <div class="header-actions">
 
+            <!-- Accès à la boutique -->
             <a href="index.php" class="connexion-apercu">
                 🛍️ Voir la boutique
             </a>
 
+            <!-- Accès au profil administrateur -->
+            <a href="index.php?page=profil" class="connexion-apercu">
+                👤 Mon profil
+            </a>
+
+            <!-- Prénom de l'administrateur connecté -->
             <span class="connexion-apercu">
                 👤 <?= echapper($_SESSION['client_prenom'] ?? '') ?>
             </span>
 
+            <!-- Déconnexion sécurisée -->
             <form action="index.php" method="POST" class="form-deconnexion">
                 <input type="hidden" name="action" value="deconnexion">
+
                 <?= champCsrf() ?>
 
-                <button type="submit" class="connexion-apercu bouton-deconnexion">
+                <button
+                    type="submit"
+                    class="connexion-apercu bouton-deconnexion"
+                >
                     Déconnexion
                 </button>
             </form>

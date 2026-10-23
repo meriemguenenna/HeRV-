@@ -1,5 +1,7 @@
 <?php
 
+
+require_once __DIR__ . '/../services/ImageProduitService.php';
 require_once __DIR__ . '/../models/Categorie.php';
 require_once __DIR__ . '/../models/ProduitAdmin.php';
 require_once __DIR__ . '/../models/CommandeAdmin.php';
@@ -280,71 +282,157 @@ class AdminController
 
     // ----- Produits -----
 
-    private function ajouterProduit(): void
-    {
-        $nom = $this->lireTexte('nom');
-        $description = $this->lireTexte('description');
-        $prix = $this->lirePrix('prix');
-        $stock = $this->lireEntier('stock', 0);
-        $idCategorie = $this->lireEntier('id_categorie', 1);
 
-        $erreur = $this->validerProduit($nom, $description, $prix, $idCategorie);
+private function ajouterProduit(): void
+{
+    $nom = $this->lireTexte('nom');
+    $description = $this->lireTexte('description');
+    $prix = $this->lirePrix('prix');
+    $stock = $this->lireEntier('stock', 0);
+    $idCategorie = $this->lireEntier('id_categorie', 1);
 
-        if ($erreur === '' && $stock === null) {
-            $erreur = 'Le stock doit être un entier positif ou nul.';
-        }
+    $erreur = $this->validerProduit($nom, $description, $prix, $idCategorie);
 
-        if ($erreur !== '') {
-            $this->terminer('admin_erreur', $erreur, 'admin_produits');
-        }
+    if ($erreur === '' && $stock === null) {
+        $erreur = 'Le stock doit être un entier positif ou nul.';
+    }
 
-        $this->executer(
-            function () use ($nom, $description, $prix, $stock, $idCategorie) {
-                $this->produitModel->ajouter(
-                    $nom,
-                    $description,
-                    $prix,
-                    $stock,
-                    $idCategorie
-                );
-            },
-            'Produit ajouté avec succès.',
-            'admin_produits'
+    if ($erreur !== '') {
+        $this->terminer('admin_erreur', $erreur, 'admin_produits');
+    }
+
+    $this->executer(
+        function () use ($nom, $description, $prix, $stock, $idCategorie) {
+
+            // Vérifier et enregistrer la photo si elle existe.
+            $nomImage = ImageProduitService::enregistrer(
+                $_FILES['image_produit'] ?? null
+            );
+
+
+try {
+    // Démarrer une transaction SQL.
+    $this->produitModel->commencerTransaction();
+
+    // Créer le produit et récupérer son identifiant.
+    $idProduit = $this->produitModel->ajouter(
+        $nom,
+        $description,
+        $prix,
+        $stock,
+        $idCategorie
+    );
+
+    // Associer la photo si une image a été choisie.
+    if ($nomImage !== null) {
+        $this->produitModel->modifierImage(
+            $idProduit,
+            $nomImage
         );
     }
 
-    private function modifierProduit(): void
-    {
-        $idProduit = $this->lireEntier('id_produit', 1);
-        $nom = $this->lireTexte('nom');
-        $description = $this->lireTexte('description');
-        $prix = $this->lirePrix('prix');
-        $idCategorie = $this->lireEntier('id_categorie', 1);
+    // Confirmer les changements si tout a réussi.
+    $this->produitModel->validerTransaction();
 
-        if ($idProduit === null) {
-            $this->terminer('admin_erreur', 'Produit invalide.', 'admin_produits');
+} catch (Throwable $e) {
+    // Annuler les changements SQL en cas d'erreur.
+    $this->produitModel->annulerTransaction();
+
+    // Supprimer la nouvelle photo si elle a été enregistrée.
+    if ($nomImage !== null) {
+        $cheminImage = dirname(__DIR__, 2)
+            . '/public/images/' . $nomImage;
+
+        if (is_file($cheminImage)) {
+            unlink($cheminImage);
         }
+    }
 
-        $erreur = $this->validerProduit($nom, $description, $prix, $idCategorie);
+    throw $e;
+}
 
-        if ($erreur !== '') {
-            $this->terminer('admin_erreur', $erreur, 'admin_produits');
-        }
+        },
+        'Produit ajouté avec succès.',
+        'admin_produits'
+    );
+}
 
-        $this->executer(
-            function () use ($idProduit, $nom, $description, $prix, $idCategorie) {
-                $this->produitModel->modifier(
-                    $idProduit,
-                    $nom,
-                    $description,
-                    $prix,
-                    $idCategorie
-                );
-            },
-            'Produit modifié avec succès.',
-            'admin_produits'
+
+
+private function modifierProduit(): void
+{
+    $idProduit = $this->lireEntier('id_produit', 1);
+    $nom = $this->lireTexte('nom');
+    $description = $this->lireTexte('description');
+    $prix = $this->lirePrix('prix');
+    $idCategorie = $this->lireEntier('id_categorie', 1);
+
+    if ($idProduit === null) {
+        $this->terminer('admin_erreur', 'Produit invalide.', 'admin_produits');
+    }
+
+    $erreur = $this->validerProduit($nom, $description, $prix, $idCategorie);
+
+    if ($erreur !== '') {
+        $this->terminer('admin_erreur', $erreur, 'admin_produits');
+    }
+
+    $this->executer(
+        function () use ($idProduit, $nom, $description, $prix, $idCategorie) {
+
+            // Enregistrer une nouvelle photo si elle a été choisie.
+            $nomImage = ImageProduitService::enregistrer(
+                $_FILES['image_produit'] ?? null
+            );
+
+
+try {
+    // Démarrer une transaction SQL.
+    $this->produitModel->commencerTransaction();
+
+    // Modifier les informations du produit.
+    $this->produitModel->modifier(
+        $idProduit,
+        $nom,
+        $description,
+        $prix,
+        $idCategorie
+    );
+
+    // Remplacer la photo uniquement si une nouvelle a été choisie.
+    if ($nomImage !== null) {
+        $this->produitModel->modifierImage(
+            $idProduit,
+            $nomImage
         );
     }
+
+    // Confirmer les modifications.
+    $this->produitModel->validerTransaction();
+
+} catch (Throwable $e) {
+    // Annuler les modifications SQL en cas d'erreur.
+    $this->produitModel->annulerTransaction();
+
+    // Supprimer la nouvelle photo téléchargée.
+    if ($nomImage !== null) {
+        $cheminImage = dirname(__DIR__, 2)
+            . '/public/images/' . $nomImage;
+
+        if (is_file($cheminImage)) {
+            unlink($cheminImage);
+        }
+    }
+
+    throw $e;
+}
+
+        },
+        'Produit modifié avec succès.',
+        'admin_produits'
+    );
+}
+
 
     // Activer ou désactiver un produit (remplace la suppression)
     private function changerEtatProduit(): void
@@ -547,21 +635,26 @@ class AdminController
     }
 
     // Exécuter une opération en base et rediriger avec un message
-    private function executer(
-        callable $operation,
-        string $messageSucces,
-        string $redirection
-    ): void {
-        try {
-            $operation();
-            $_SESSION['admin_succes'] = $messageSucces;
-        } catch (PDOException $e) {
-            $_SESSION['admin_erreur'] = $this->messageErreur($e);
-        }
 
-        header('Location: index.php?page=' . $redirection, true, 303);
-        exit;
+private function executer(
+    callable $operation,
+    string $messageSucces,
+    string $redirection
+): void {
+    try {
+        $operation();
+        $_SESSION['admin_succes'] = $messageSucces;
+
+    } catch (PDOException $e) {
+        $_SESSION['admin_erreur'] = $this->messageErreur($e);
+
+    } catch (RuntimeException $e) {
+        $_SESSION['admin_erreur'] = $e->getMessage();
     }
+
+    header('Location: index.php?page=' . $redirection, true, 303);
+    exit;
+}
 
     // Enregistrer un message puis rediriger
     private function terminer(
