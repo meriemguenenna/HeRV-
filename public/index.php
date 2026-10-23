@@ -13,7 +13,7 @@ require_once __DIR__ . '/../app/controllers/PanierController.php';
 // Authentification
 require_once __DIR__ . '/../app/models/Client.php';
 require_once __DIR__ . '/../app/controllers/AuthController.php';
-
+require_once __DIR__ . '/../app/controllers/AdminController.php';
 
 // --------------------------------------------------
 // 1. Sécurité : jeton CSRF
@@ -184,8 +184,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $authController->modifierProfil();
         exit;
     }
+    
+        // ----------------------------------------------
+    // 2.8 Administration (réservé aux administrateurs)
+    // ----------------------------------------------
 
+    if (is_string($action) && strpos($action, 'admin_') === 0) {
 
+        $adminController = new AdminController($pdo);
+        $adminController->traiterAction($action);
+        exit;
+    }
     // Refuser les actions POST inconnues
     http_response_code(400);
     exit('Action inconnue.');
@@ -239,6 +248,15 @@ case 'profil':
     break;
     
 
+        // Administration (réservé aux administrateurs)
+    case 'admin':
+    case 'admin_produits':
+    case 'admin_categories':
+    case 'admin_stocks':
+    case 'admin_commandes':
+        $controller = new AdminController($pdo);
+        $controller->afficher($page);
+        break;
     // Page inconnue
     default:
         http_response_code(404);
