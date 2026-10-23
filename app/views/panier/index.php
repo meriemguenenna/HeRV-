@@ -135,6 +135,14 @@
 
 </div>
 
+<div class="validation-panier">
+    <a href="index.php?page=validation_commande"
+       class="bouton-commander">
+        💜 Passer commande
+    </a>
+</div>
+
+
 
     <a href="index.php#produits" class="retour-boutique">
         ← Continuer mes achats

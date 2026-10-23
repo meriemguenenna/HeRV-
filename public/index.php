@@ -9,6 +9,7 @@ require_once __DIR__ . '/../config/database.php';
 // Contrôleurs existants
 require_once __DIR__ . '/../app/controllers/ProduitController.php';
 require_once __DIR__ . '/../app/controllers/PanierController.php';
+require_once __DIR__ . '/../app/controllers/CommandeController.php';
 
 // Authentification
 require_once __DIR__ . '/../app/models/Client.php';
@@ -195,6 +196,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $adminController->traiterAction($action);
         exit;
     }
+
+    
+    // ----------------------------------------------
+    // Confirmer une commande (paiement simulé)
+    // ----------------------------------------------
+
+    if ($action === 'confirmer_commande') {
+        $commandeController = new CommandeController($pdo);
+        $commandeController->confirmer();
+        exit;
+    }
+
     // Refuser les actions POST inconnues
     http_response_code(400);
     exit('Action inconnue.');
@@ -228,6 +241,28 @@ switch ($page) {
         $controller = new PanierController($pdo);
         $controller->index();
         break;
+
+    
+    // Validation de commande (avant paiement simulé)
+    case 'validation_commande':
+
+        // Réserver cette page aux clients connectés
+        if (
+            empty($_SESSION['client_id'])
+            || ($_SESSION['client_role'] ?? '') !== 'client'
+        ) {
+            $_SESSION['erreur'] =
+                'Connectez-vous avec un compte client pour commander.';
+
+            header('Location: index.php?page=connexion', true, 303);
+            exit;
+        }
+
+        // Récupérer le panier sans enregistrer de commande
+        $controller = new PanierController($pdo);
+        $controller->index();
+        break;
+
 
     // Inscription
     case 'inscription':
