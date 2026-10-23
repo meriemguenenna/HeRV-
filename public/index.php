@@ -185,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $authController->modifierProfil();
         exit;
     }
-    
+
         // ----------------------------------------------
     // 2.8 Administration (réservé aux administrateurs)
     // ----------------------------------------------
@@ -197,7 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    
+
     // ----------------------------------------------
     // Confirmer une commande (paiement simulé)
     // ----------------------------------------------
@@ -242,7 +242,7 @@ switch ($page) {
         $controller->index();
         break;
 
-    
+
     // Validation de commande (avant paiement simulé)
     case 'validation_commande':
 
@@ -262,8 +262,42 @@ switch ($page) {
         $controller = new PanierController($pdo);
         $controller->index();
         break;
+        // Confirmation après une commande réussie
+    case 'confirmation_commande':
 
+        // Réserver cette page aux clients connectés
+        if (
+            empty($_SESSION['client_id'])
+            || ($_SESSION['client_role'] ?? '') !== 'client'
+        ) {
+            header('Location: index.php?page=connexion', true, 303);
+            exit;
+        }
 
+        // Récupérer le numéro de la commande confirmée
+        $idCommande = (int) ($_SESSION['commande_confirmee'] ?? 0);
+
+        if ($idCommande <= 0) {
+            header('Location: index.php?page=panier', true, 303);
+            exit;
+        }
+
+        // Empêcher de réafficher cette confirmation
+        unset($_SESSION['commande_confirmee']);
+
+        require __DIR__ . '/../app/views/commandes/confirmation.php';
+        break;
+
+    // Historique des commandes du client
+    case 'mes_commandes':
+        $controller = new CommandeController($pdo);
+        $controller->historique();
+        break;
+    // Détails d'une commande du client
+    case 'detail_commande':
+    $controller = new CommandeController($pdo);
+    $controller->details();
+    break;
     // Inscription
     case 'inscription':
         $controller = new AuthController($pdo);
@@ -276,12 +310,12 @@ switch ($page) {
         $controller->afficherConnexion();
         break;
 
-    
+
 case 'profil':
     $controller = new AuthController($pdo);
     $controller->afficherProfil();
     break;
-    
+
 
         // Administration (réservé aux administrateurs)
     case 'admin':
