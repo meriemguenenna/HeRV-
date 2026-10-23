@@ -1031,6 +1031,207 @@ a.connexion-apercu:hover {
         font-size: 27px;
     }
 }
+/* ==========================================
+   HISTORIQUE DES COMMANDES CLIENT
+   ========================================== */
 
+.commandes-page {
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 35px;
+    font-family: 'Poppins', sans-serif;
+}
 
+.commandes-titre {
+    color: #252033;
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.commandes-description {
+    color: #6b6478;
+    font-size: 15px;
+    margin-bottom: 30px;
+}
+
+.commandes-carte {
+    background: white;
+    border: 1px solid #eee8fa;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(80, 50, 140, 0.08);
+    overflow-x: auto;
+}
+
+.commandes-tableau {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+.commandes-tableau th {
+    padding: 20px;
+    text-align: left;
+    background: #f8f5ff;
+    color: #59428a;
+    font-size: 13px;
+}
+
+.commandes-tableau td {
+    padding: 20px;
+    border-top: 1px solid #f0ecf7;
+    color: #352d45;
+    font-size: 14px;
+}
+
+.commandes-tableau tbody tr:hover {
+    background: #fcfaff;
+}
+
+.commandes-numero {
+    color: #8054eb;
+    font-weight: 700;
+}
+
+.commandes-total {
+    font-weight: 700;
+}
+
+.commandes-statut {
+    display: inline-block;
+    padding: 7px 12px;
+    border-radius: 20px;
+    background: #f0eaff;
+    color: #7046ce;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.commandes-statut--annulee {
+    background: #fff0f0;
+    color: #b84343;
+}
+
+.commandes-statut--livree {
+    background: #e7f7ed;
+    color: #28784a;
+}
+
+.commandes-retour {
+    display: inline-block;
+    margin-top: 30px;
+    color: #8054eb;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.commandes-retour:hover {
+    text-decoration: underline;
+}
+
+.commandes-vide {
+    padding: 35px;
+    background: #f8f5ff;
+    border-radius: 18px;
+    color: #59428a;
+}
+
+@media (max-width: 768px) {
+    .commandes-page {
+        margin: 20px auto;
+        padding: 20px;
+    }
+
+    .commandes-titre {
+        font-size: 26px;
+    }
+}
+/* ==========================================
+   CONFIRMATION DE COMMANDE
+   ========================================== */
+
+.confirmation-page {
+    max-width: 760px;
+    margin: 70px auto;
+    padding: 25px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.confirmation-carte {
+    background: white;
+    padding: 55px 40px;
+    border: 1px solid #eee8fa;
+    border-radius: 24px;
+    box-shadow: 0 10px 35px rgba(80, 50, 140, 0.08);
+    text-align: center;
+}
+
+.confirmation-icone {
+    font-size: 55px;
+    margin-bottom: 20px;
+}
+
+.confirmation-titre {
+    color: #252033;
+    font-size: 32px;
+    margin-bottom: 18px;
+}
+
+.confirmation-description {
+    color: #6b6478;
+    font-size: 15px;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+.confirmation-numero {
+    display: inline-block;
+    padding: 15px 28px;
+    margin-bottom: 30px;
+    background: #f8f5ff;
+    border-radius: 15px;
+    color: #8054eb;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.confirmation-paiement {
+    color: #6b6478;
+    font-size: 13px;
+    line-height: 1.8;
+    margin-bottom: 35px;
+}
+
+.confirmation-bouton {
+    display: inline-block;
+    padding: 15px 30px;
+    background: #8054eb;
+    color: white;
+    border-radius: 30px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.confirmation-bouton:hover {
+    background: #6d42db;
+}
+
+@media (max-width: 768px) {
+    .confirmation-page {
+        margin: 25px auto;
+        padding: 15px;
+    }
+
+    .confirmation-carte {
+        padding: 35px 20px;
+    }
+
+    .confirmation-titre {
+        font-size: 25px;
+    }
+
+    .confirmation-numero {
+        font-size: 19px;
+    }
+}
 

@@ -234,6 +234,13 @@ $email = htmlspecialchars($client['email'], ENT_QUOTES, 'UTF-8');
         Enregistrer les modifications
     </button>
 </form>
+<?php if (($_SESSION['client_role'] ?? '') === 'client'): ?>
+    <p style="margin-top: 20px;">
+        <a href="index.php?page=mes_commandes">
+             Mes commandes
+        </a>
+    </p>
+<?php endif; ?>
 
 
         <a href="index.php" class="profil-retour">
