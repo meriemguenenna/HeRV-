@@ -117,6 +117,6 @@ if (empty($_SESSION['csrf_token'])) {
         <a href="index.php">Retour à la boutique</a>
     </p>
 </main>
-
+<script src="js/app.js" defer></script>
 </body>
 </html>
