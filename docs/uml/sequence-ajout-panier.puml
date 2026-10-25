@@ -1,0 +1,53 @@
+
+@startuml ajout-au-panier
+title MiniShop - Sequence d'ajout au panier
+
+autonumber
+
+actor "Client" as U
+boundary "Page produit" as V
+control "PanierController" as C
+entity "Produit (modele PHP)" as M
+database "MySQL" as DB
+collections "Session PHP" as S
+
+U -> V : Cliquer sur Ajouter au panier
+V -> C : ajouter(idProduit)
+
+activate C
+
+C -> M : getProduitParId(idProduit)
+activate M
+
+M -> DB : SELECT produit actif par identifiant
+activate DB
+DB --> M : Produit ou aucun resultat
+deactivate DB
+
+M --> C : Produit ou null
+deactivate M
+
+alt Produit introuvable ou inactif
+    C -> S : Enregistrer message d'erreur
+    C --> V : Fin de l'ajout
+
+else Produit disponible
+    C -> C : Recuperer le stock du produit
+    C -> S : Initialiser panier si absent
+    C -> S : Lire quantite actuelle du produit
+    S --> C : Quantite actuelle
+
+    alt Stock nul ou quantite deja au maximum
+        C -> S : Enregistrer erreur de stock
+        C --> V : Fin de l'ajout
+
+    else Stock suffisant
+        C -> S : panier[idProduit] = quantite + 1
+        C -> S : Enregistrer message de succes
+        C --> V : Fin de l'ajout
+    end
+end
+
+deactivate C
+
+@enduml

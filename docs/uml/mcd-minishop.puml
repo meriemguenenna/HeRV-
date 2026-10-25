@@ -1,0 +1,65 @@
+
+@startuml mcd-minishop
+title MiniShop - Modèle conceptuel de données (MCD)
+
+hide circle
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+entity "CLIENT" as CLIENT {
+  * id_client : identifiant
+  --
+  nom
+  prenom
+  email
+  password
+  role
+  date_creation
+}
+
+entity "CATEGORIE" as CATEGORIE {
+  * id_categorie : identifiant
+  --
+  nom
+}
+
+entity "PRODUIT" as PRODUIT {
+  * id_produit : identifiant
+  --
+  nom
+  description
+  prix
+  stock
+  actif
+  image
+}
+
+entity "COMMANDE" as COMMANDE {
+  * id_commande : identifiant
+  --
+  date_commande
+  statut
+}
+
+entity "LIGNE_COMMANDE" as LIGNE {
+  * id_commande + id_produit : identifiant
+  --
+  quantite
+  prix_unitaire
+}
+
+entity "ORDER_STATUS_HISTORY" as HISTORIQUE {
+  * id : identifiant
+  --
+  old_status
+  new_status
+  changed_at
+}
+
+CLIENT ||--o{ COMMANDE : "passe"
+CATEGORIE ||--o{ PRODUIT : "contient"
+COMMANDE ||--|{ LIGNE : "comprend"
+PRODUIT ||--o{ LIGNE : "concerne"
+COMMANDE ||--o{ HISTORIQUE : "possède"
+
+@enduml

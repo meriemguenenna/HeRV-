@@ -17,7 +17,7 @@ class CommandeController
      */
     public function confirmer(): void
     {
-        // 1. Vérifier que le client est connecté
+        // Vérifier que la commande est passée par un client connecté
         $idClient = (int) ($_SESSION['client_id'] ?? 0);
         $role = $_SESSION['client_role'] ?? '';
 
@@ -29,7 +29,7 @@ class CommandeController
             exit;
         }
 
-        // 2. Vérifier que le panier n'est pas vide
+        /// Vérifier le contenu du panier
         $panier = $_SESSION['panier'] ?? [];
 
         if (!is_array($panier) || empty($panier)) {
@@ -39,24 +39,21 @@ class CommandeController
             exit;
         }
 
-        // 3. Enregistrer la commande
+        // Créer la commande
         try {
             $idCommande = $this->commandeModel->creer(
                 $idClient,
                 $panier
             );
 
-            // 4. Vider le panier uniquement après réussite
+            // Vider le panier après l'enregistrement de la commande
             unset($_SESSION['panier']);
 
             $_SESSION['succes'] =
                 'Votre commande n°' . $idCommande
                 . ' a été enregistrée avec succès !';
-
-            // 5. Mémoriser la commande confirmée
 $_SESSION['commande_confirmee'] = $idCommande;
 
-// Rediriger vers la page de confirmation
 header('Location: index.php?page=confirmation_commande', true, 303);
 exit;
 

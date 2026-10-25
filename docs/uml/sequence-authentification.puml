@@ -1,0 +1,46 @@
+
+@startuml SequenceAuthentification
+title MiniShop - Sequence d'authentification
+
+autonumber
+
+actor "Utilisateur" as U
+boundary "Page de connexion" as V
+control "AuthController" as A
+entity "Client (modele PHP)" as C
+database "MySQL" as DB
+collections "Session PHP" as S
+
+U -> V : Saisir email et mot de passe
+U -> V : Valider le formulaire
+V -> A : connecter() avec les donnees POST
+
+A -> A : Verifier email et mot de passe
+
+alt Donnees invalides
+    A -> V : Afficher le formulaire avec erreur
+    V --> U : Identifiants invalides
+else Donnees valides
+    A -> C : trouverParEmail(email)
+    C -> DB : SELECT compte par email
+    DB --> C : Compte ou aucun resultat
+    C --> A : Donnees du compte ou null
+
+    alt Compte introuvable ou mot de passe incorrect
+        A -> A : password_verify() si compte trouve
+        A -> V : Afficher le formulaire avec erreur
+        V --> U : Identifiants incorrects
+    else Authentification reussie
+        A -> A : password_verify()
+        A -> S : session_regenerate_id(true)
+        A -> S : Enregistrer id, nom, prenom, role
+
+        alt Role administrateur
+            A --> U : Redirection HTTP 303 vers page=admin
+        else Role client
+            A --> U : Redirection HTTP 303 vers le catalogue
+        end
+    end
+end
+
+@enduml

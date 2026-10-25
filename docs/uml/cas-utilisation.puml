@@ -1,0 +1,77 @@
+@startuml MiniShop
+
+
+title MiniShop - Diagramme de cas d'utilisation
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor "Visiteur" as V
+actor "Client" as C
+actor "Administrateur" as A
+
+' Un client est aussi un visiteur
+C --|> V
+
+rectangle "Système MiniShop" {
+
+  package "Catalogue" {
+    usecase "Consulter les catégories" as UC1
+    usecase "Rechercher un produit" as UC2
+    usecase "Filtrer les produits" as UC3
+    usecase "Consulter la fiche\nd'un produit" as UC4
+  }
+
+  package "Compte utilisateur" {
+    usecase "Créer un compte" as UC5
+    usecase "Se connecter" as UC6
+    usecase "Se déconnecter" as UC7
+    usecase "Modifier ses\ninformations" as UC8
+  }
+
+  package "Panier et commandes" {
+    usecase "Ajouter un produit\nau panier" as UC9
+    usecase "Modifier les quantités" as UC10
+    usecase "Retirer un produit\ndu panier" as UC11
+    usecase "Passer une commande" as UC12
+    usecase "Consulter l'historique\ndes commandes" as UC13
+  }
+
+  package "Administration" {
+    usecase "Gérer les catégories" as UC14
+    usecase "Gérer les produits" as UC15
+    usecase "Modifier le stock" as UC16
+    usecase "Consulter les commandes" as UC17
+    usecase "Modifier le statut\nd'une commande" as UC18
+  }
+}
+
+' Visiteur
+V -- UC1
+V -- UC2
+V -- UC3
+V -- UC4
+V -- UC5
+V -- UC6
+
+' Client
+C -- UC7
+C -- UC8
+C -- UC9
+C -- UC10
+C -- UC11
+C -- UC12
+C -- UC13
+
+' Administrateur
+' Administrateur
+A -- UC6
+A -- UC7
+A -- UC14
+A -- UC15
+A -- UC16
+A -- UC17
+A -- UC18
+
+@enduml

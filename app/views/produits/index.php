@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -15,91 +14,88 @@
 <body>
 
     <!-- Barre de navigation -->
-    
-<!-- Barre de navigation -->
-<header class="site-header">
+    <header class="site-header">
 
-    <a href="index.php" class="logo">
-        MiniShop <span>✦</span>
-    </a>
-
-    <nav class="navigation" aria-label="Navigation principale">
-        <a href="index.php" class="nav-active">Accueil</a>
-        <a href="#produits">Boutique</a>
-
-        <!-- Lien visible uniquement pour les administrateurs -->
-        <?php if (
-            !empty($_SESSION['client_id'])
-            && ($_SESSION['client_role'] ?? '') === 'admin'
-        ): ?>
-            <a href="index.php?page=admin">
-                Administration
-            </a>
-        <?php endif; ?>
-    </nav>
-
-    <div class="header-actions">
-
-        <?php if (!empty($_SESSION['client_id'])): ?>
-
-            <a href="index.php?page=profil" class="connexion-apercu">
-                👤 Mon profil
-            </a>
-
-            <span class="connexion-apercu">
-                👤 Bonjour,
-                <?= htmlspecialchars(
-                    $_SESSION['client_prenom'] ?? '',
-                    ENT_QUOTES,
-                    'UTF-8'
-                ) ?>
-            </span>
-
-            <form action="index.php" method="POST" class="form-deconnexion">
-                <input type="hidden" name="action" value="deconnexion">
-
-                <input
-                    type="hidden"
-                    name="csrf_token"
-                    value="<?= htmlspecialchars(
-                        $_SESSION['csrf_token'],
-                        ENT_QUOTES,
-                        'UTF-8'
-                    ) ?>"
-                >
-
-                <button
-                    type="submit"
-                    class="connexion-apercu bouton-deconnexion"
-                >
-                    Déconnexion
-                </button>
-            </form>
-
-        <?php else: ?>
-
-            <a href="index.php?page=connexion" class="connexion-apercu">
-                👤 Connexion
-            </a>
-
-            <a href="index.php?page=inscription" class="connexion-apercu">
-                Inscription
-            </a>
-
-        <?php endif; ?>
-
-        <a href="index.php?page=panier" class="panier-apercu">
-            <span aria-hidden="true">🛒</span>
-            Panier
-
-            <span class="panier-compteur">
-                <?= array_sum($_SESSION['panier'] ?? []) ?>
-            </span>
+        <a href="index.php" class="logo">
+            MiniShop <span>✦</span>
         </a>
 
-    </div>
-</header>
+        <nav class="navigation" aria-label="Navigation principale">
+            <a href="index.php" class="nav-active">Accueil</a>
+            <a href="#produits">Boutique</a>
 
+            <!-- Lien visible uniquement pour les administrateurs -->
+            <?php if (
+                !empty($_SESSION['client_id'])
+                && ($_SESSION['client_role'] ?? '') === 'admin'
+            ): ?>
+                <a href="index.php?page=admin">
+                    Administration
+                </a>
+            <?php endif; ?>
+        </nav>
+
+        <div class="header-actions">
+
+            <?php if (!empty($_SESSION['client_id'])): ?>
+
+                <a href="index.php?page=profil" class="connexion-apercu">
+                    👤 Mon profil
+                </a>
+
+                <span class="connexion-apercu">
+                    👤 Bonjour,
+                    <?= htmlspecialchars(
+                        $_SESSION['client_prenom'] ?? '',
+                        ENT_QUOTES,
+                        'UTF-8'
+                    ) ?>
+                </span>
+
+                <form action="index.php" method="POST" class="form-deconnexion">
+                    <input type="hidden" name="action" value="deconnexion">
+
+                    <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="<?= htmlspecialchars(
+                            $_SESSION['csrf_token'],
+                            ENT_QUOTES,
+                            'UTF-8'
+                        ) ?>"
+                    >
+
+                    <button
+                        type="submit"
+                        class="connexion-apercu bouton-deconnexion"
+                    >
+                        Déconnexion
+                    </button>
+                </form>
+
+            <?php else: ?>
+
+                <a href="index.php?page=connexion" class="connexion-apercu">
+                    👤 Connexion
+                </a>
+
+                <a href="index.php?page=inscription" class="connexion-apercu">
+                    Inscription
+                </a>
+
+            <?php endif; ?>
+
+            <a href="index.php?page=panier" class="panier-apercu">
+                <span aria-hidden="true">🛒</span>
+                Panier
+
+                <span class="panier-compteur">
+                    <?= array_sum($_SESSION['panier'] ?? []) ?>
+                </span>
+            </a>
+
+        </div>
+    </header>
 
     <main>
 
@@ -136,56 +132,54 @@
                 </p>
             </div>
 
+            <form action="index.php" method="GET" class="form-recherche">
+                <input
+                    type="hidden"
+                    name="page"
+                    value="accueil"
+                >
 
-<form action="index.php" method="GET" class="form-recherche">
-    <input
-        type="hidden"
-        name="page"
-        value="accueil"
-    >
+                <input
+                    type="search"
+                    name="recherche"
+                    placeholder="Rechercher un produit..."
+                    aria-label="Rechercher un produit"
+                    value="<?= htmlspecialchars($recherche ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                >
 
-    <input
-        type="search"
-        name="recherche"
-        placeholder="Rechercher un produit..."
-        aria-label="Rechercher un produit"
-        value="<?= htmlspecialchars($recherche ?? '', ENT_QUOTES, 'UTF-8') ?>"
-    >
+                <button type="submit">
+                    🔎 Rechercher
+                </button>
 
-    <button type="submit">
-        🔎 Rechercher
-    </button>
+                <a href="index.php#produits">
+                    Effacer
+                </a>
+            </form>
 
-    <a href="index.php#produits">
-        Effacer
-    </a>
-</form>
+            <!-- Filtres par catégorie -->
+            <div class="filtres-categories">
 
-<!-- Filtres par catégorie -->
-<div class="filtres-categories">
+                <a href="index.php?page=accueil#produits"
+                   class="filtre-categorie <?= empty($idCategorie) ? 'actif' : '' ?>">
+                    Tous les produits
+                </a>
 
-    <a href="index.php?page=accueil#produits"
-       class="filtre-categorie <?= empty($idCategorie) ? 'actif' : '' ?>">
-        Tous les produits
-    </a>
+                <a href="index.php?page=accueil&categorie=1#produits"
+                   class="filtre-categorie <?= $idCategorie === 1 ? 'actif' : '' ?>">
+                    Informatique
+                </a>
 
-    <a href="index.php?page=accueil&categorie=1#produits"
-       class="filtre-categorie <?= $idCategorie === 1 ? 'actif' : '' ?>">
-        Informatique
-    </a>
+                <a href="index.php?page=accueil&categorie=2#produits"
+                   class="filtre-categorie <?= $idCategorie === 2 ? 'actif' : '' ?>">
+                    Téléphonie
+                </a>
 
-    <a href="index.php?page=accueil&categorie=2#produits"
-       class="filtre-categorie <?= $idCategorie === 2 ? 'actif' : '' ?>">
-        Téléphonie
-    </a>
+                <a href="index.php?page=accueil&categorie=3#produits"
+                   class="filtre-categorie <?= $idCategorie === 3 ? 'actif' : '' ?>">
+                    Accessoires
+                </a>
 
-    <a href="index.php?page=accueil&categorie=3#produits"
-       class="filtre-categorie <?= $idCategorie === 3 ? 'actif' : '' ?>">
-        Accessoires
-    </a>
-
-</div>
-
+            </div>
 
             <?php if (empty($produits)): ?>
 
@@ -194,28 +188,6 @@
             <?php else: ?>
 
                 <div class="produits-grid">
-
-                    <?php
-                    
-$images = [
-    1  => 'ordinateur.jpg',
-    2  => 'souris.jpg',
-    3  => 'clavier.jpg',
-    4  => 'iphone.jpg',
-    5  => 'casque.jpg',
-    6  => 'ecran.jpg',
-    7  => 'webcam.jpg',
-    8  => 'ssd.jpg',
-    9  => 'ordinateur-bureau.jpg',
-    10 => 'coque.jpg',
-    11 => 'chargeur.jpg',
-    12 => 'batterie.jpg',
-    13 => 'support.jpg',
-    14 => 'tapis.jpg',
-    15 => 'hub-usb.jpg'
-];
-
-                    ?>
 
                     <?php foreach ($produits as $produit): ?>
 
@@ -249,16 +221,14 @@ $images = [
                                     COLLECTION TECH
                                 </span>
 
-                                
-<h3>
-    <a
-        href="index.php?page=detail&id=<?= $id ?>"
-        class="lien-detail-produit"
-    >
-        <?= htmlspecialchars($produit['nom'], ENT_QUOTES, 'UTF-8') ?>
-    </a>
-</h3>
-
+                                <h3>
+                                    <a
+                                        href="index.php?page=detail&id=<?= $id ?>"
+                                        class="lien-detail-produit"
+                                    >
+                                        <?= htmlspecialchars($produit['nom'], ENT_QUOTES, 'UTF-8') ?>
+                                    </a>
+                                </h3>
 
                                 <p class="produit-description">
                                     <?= htmlspecialchars($produit['description'] ?? '', ENT_QUOTES, 'UTF-8') ?>
@@ -266,39 +236,39 @@ $images = [
 
                                 <div class="produit-bas">
 
-    <p class="prix">
-        <?= number_format((float) $produit['prix'], 2, ',', ' ') ?> €
-    </p>
+                                    <p class="prix">
+                                        <?= number_format((float) $produit['prix'], 2, ',', ' ') ?> €
+                                    </p>
 
-    <span class="stock <?= $stock > 0 ? '' : 'stock-vide' ?>">
-        <?= $stock > 0 ? '● En stock : ' . $stock : '● Rupture de stock' ?>
-    </span>
+                                    <span class="stock <?= $stock > 0 ? '' : 'stock-vide' ?>">
+                                        <?= $stock > 0 ? '● En stock : ' . $stock : '● Rupture de stock' ?>
+                                    </span>
 
-    <form action="index.php" method="POST" class="form-panier">
-        <input type="hidden" name="action" value="ajouter_panier">
+                                    <form action="index.php" method="POST" class="form-panier">
+                                        <input type="hidden" name="action" value="ajouter_panier">
 
-        <input
-            type="hidden"
-            name="id_produit"
-            value="<?= (int) $produit['id_produit'] ?>"
-        >
+                                        <input
+                                            type="hidden"
+                                            name="id_produit"
+                                            value="<?= (int) $produit['id_produit'] ?>"
+                                        >
 
-        <input
-            type="hidden"
-            name="csrf_token"
-            value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>"
-        >
+                                        <input
+                                            type="hidden"
+                                            name="csrf_token"
+                                            value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>"
+                                        >
 
-        <button
-            type="submit"
-            class="bouton-panier"
-            <?= $stock <= 0 ? 'disabled' : '' ?>
-        >
-            🛒 <?= $stock > 0 ? 'Ajouter au panier' : 'Indisponible' ?>
-        </button>
-    </form>
+                                        <button
+                                            type="submit"
+                                            class="bouton-panier"
+                                            <?= $stock <= 0 ? 'disabled' : '' ?>
+                                        >
+                                            🛒 <?= $stock > 0 ? 'Ajouter au panier' : 'Indisponible' ?>
+                                        </button>
+                                    </form>
 
-</div>
+                                </div>
 
                             </div>
 

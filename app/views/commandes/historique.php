@@ -51,14 +51,6 @@ $commandes = $commandes ?? [];
                                     N°<?= (int) $commande['id_commande'] ?>
                                 </span>
                             </td>
-                            <td>
-    <a
-        href="index.php?page=detail_commande&id=<?= (int) $commande['id_commande'] ?>"
-        class="commandes-numero"
-    >
-        Voir les détails →
-    </a>
-</td>
 
                             <td>
                                 <?= htmlspecialchars(
@@ -91,6 +83,15 @@ $commandes = $commandes ?? [];
                                         ' '
                                     ) ?> €
                                 </span>
+                            </td>
+
+                            <td>
+                                <a
+                                    href="index.php?page=detail_commande&id=<?= (int) $commande['id_commande'] ?>"
+                                    class="commandes-numero"
+                                >
+                                    Voir les détails →
+                                </a>
                             </td>
                         </tr>
 

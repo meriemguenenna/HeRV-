@@ -1,0 +1,58 @@
+
+@startuml rechercher_produit
+title MiniShop - Sequence de recherche d'un produit
+
+autonumber
+
+actor "Visiteur" as V
+boundary "Page catalogue" as Page
+control "ProduitController" as C
+entity "Produit (modele PHP)" as M
+database "MySQL" as DB
+
+V -> Page : Saisir un terme de recherche
+V -> Page : Valider la recherche
+
+Page -> C : index() avec GET recherche
+
+activate C
+C -> C : Recuperer et nettoyer recherche avec trim()
+
+alt Recherche non vide
+    C -> M : rechercherProduits(recherche)
+    activate M
+    M -> DB : CALL rechercher_produit(recherche)
+    activate DB
+    DB --> M : Produits correspondants
+    deactivate DB
+    M --> C : Tableau de produits
+    deactivate M
+
+else Recherche vide et categorie valide
+    C -> C : Verifier identifiant de categorie
+    C -> M : getProduitsParCategorie(idCategorie)
+    activate M
+    M -> DB : CALL produits_par_categorie(idCategorie)
+    activate DB
+    DB --> M : Produits de la categorie
+    deactivate DB
+    M --> C : Tableau de produits
+    deactivate M
+
+else Recherche vide et aucune categorie valide
+    C -> M : getTousLesProduits()
+    activate M
+    M -> DB : SELECT produits actifs
+    activate DB
+    DB --> M : Liste des produits
+    deactivate DB
+    M --> C : Tableau de produits
+    deactivate M
+end
+
+C -> Page : Charger app/views/produits/index.php
+deactivate C
+
+Page --> V : Afficher les produits
+
+@enduml
