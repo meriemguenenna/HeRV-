@@ -1,25 +1,6 @@
-
 <?php
-$images = [
-    1 => 'ordinateur.jpg',
-    2 => 'souris.jpg',
-    3 => 'clavier.jpg',
-    4 => 'iphone.jpg',
-    5 => 'casque.jpg',
-    6 => 'ecran.jpg',
-    7 => 'webcam.jpg',
-    8 => 'ssd.jpg',
-    9 => 'ordinateur-bureau.jpg',
-    10 => 'coque.jpg',
-    11 => 'chargeur.jpg',
-    12 => 'batterie.jpg',
-    13 => 'support.jpg',
-    14 => 'tapis.jpg',
-    15 => 'hub-usb.jpg'
-];
-
 $idProduit = (int) $produit['id_produit'];
-$image = $images[$idProduit] ?? null;
+$image = $produit['image'] ?? null;
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +22,7 @@ $image = $images[$idProduit] ?? null;
     <div class="detail-contenu">
 
         <div class="detail-image">
-            <?php if ($image !== null): ?>
+            <?php if (!empty($image)): ?>
                 <img
                     src="images/<?= htmlspecialchars($image, ENT_QUOTES, 'UTF-8') ?>"
                     alt="<?= htmlspecialchars($produit['nom'], ENT_QUOTES, 'UTF-8') ?>"

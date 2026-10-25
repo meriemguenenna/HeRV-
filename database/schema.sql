@@ -1,11 +1,3 @@
-
-/*CREATE DATABASE IF NOT EXISTS minishop
-CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci;
-
-USE minishop;
-*/
-
 -- Base de données déjà créée sur le serveur de l'IUT
 -- La base est sélectionnée dans phpMyAdmin.
 
@@ -35,6 +27,7 @@ CREATE TABLE PRODUIT (
     stock INT NOT NULL DEFAULT 0,
     actif BOOLEAN NOT NULL DEFAULT TRUE,
     id_categorie INT NOT NULL,
+    image VARCHAR(255) DEFAULT NULL,
 
     CONSTRAINT fk_produit_categorie
         FOREIGN KEY (id_categorie)

@@ -1,7 +1,3 @@
-
-/*USE minishop;
-*/
-
 -- 1. Catégories
 INSERT INTO CATEGORIE (nom) VALUES
 ('Informatique'),
@@ -73,6 +69,25 @@ VALUES
  'Adaptateur USB pour connecter plusieurs appareils.',
  24.99, 19, TRUE, 3);
 
+
+-- 2 bis. Images des produits de démonstration
+-- La colonne image existe déjà dans schema.sql.
+
+UPDATE PRODUIT SET image = 'ordinateur.jpg' WHERE id_produit = 1;
+UPDATE PRODUIT SET image = 'souris.jpg' WHERE id_produit = 2;
+UPDATE PRODUIT SET image = 'clavier.jpg' WHERE id_produit = 3;
+UPDATE PRODUIT SET image = 'iphone.jpg' WHERE id_produit = 4;
+UPDATE PRODUIT SET image = 'casque.jpg' WHERE id_produit = 5;
+UPDATE PRODUIT SET image = 'ecran.jpg' WHERE id_produit = 6;
+UPDATE PRODUIT SET image = 'webcam.jpg' WHERE id_produit = 7;
+UPDATE PRODUIT SET image = 'ssd.jpg' WHERE id_produit = 8;
+UPDATE PRODUIT SET image = 'ordinateur-bureau.jpg' WHERE id_produit = 9;
+UPDATE PRODUIT SET image = 'coque.jpg' WHERE id_produit = 10;
+UPDATE PRODUIT SET image = 'chargeur.jpg' WHERE id_produit = 11;
+UPDATE PRODUIT SET image = 'batterie.jpg' WHERE id_produit = 12;
+UPDATE PRODUIT SET image = 'support.jpg' WHERE id_produit = 13;
+UPDATE PRODUIT SET image = 'tapis.jpg' WHERE id_produit = 14;
+UPDATE PRODUIT SET image = 'hub-usb.jpg' WHERE id_produit = 15;
 
 
 -- 3. Clients et administrateur

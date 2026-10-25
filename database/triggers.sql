@@ -1,7 +1,3 @@
-
-/*USE minishop;
-*/
-
 DELIMITER //
 
 -- 1. Vérifier un produit avant son insertion

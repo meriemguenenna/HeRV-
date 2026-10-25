@@ -1,7 +1,3 @@
-
-/*USE minishop;
-*/
-
 DELIMITER //
 
 -- 1. Rechercher les produits par nom
