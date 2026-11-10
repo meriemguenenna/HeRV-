@@ -1,0 +1,106 @@
+
+@startuml sequence-admin_ajouter_produit
+title MiniShop - Sequence d'ajout d'un produit par l'administrateur
+
+autonumber
+
+actor "Administrateur" as A
+boundary "Formulaire produit" as V
+control "Routeur index.php" as R
+control "AdminController" as C
+control "ImageProduitService" as I
+entity "ProduitAdmin" as M
+database "MySQL" as DB
+collections "Session PHP" as S
+
+A -> V : Renseigner les informations du produit
+A -> V : Valider le formulaire
+V -> R : POST admin_ajouter_produit
+
+note over R
+  Verification du jeton CSRF
+  dans index.php
+end note
+
+R -> C : traiterAction(admin_ajouter_produit)
+activate C
+
+C -> S : Lire client_id et client_role
+S --> C : Informations de session
+
+alt Utilisateur non connecte
+    C --> V : Redirection 303 vers connexion
+
+else Utilisateur non administrateur
+    C --> V : Erreur HTTP 403
+
+else Administrateur autorise
+    C -> C : Lire nom, description, prix,\nstock et categorie
+    C -> C : Valider les donnees
+
+    alt Donnees invalides
+        C -> S : Enregistrer admin_erreur
+        C --> V : Redirection 303 vers admin_produits
+
+    else Donnees valides
+        C -> I : enregistrer(image_produit)
+        activate I
+        I --> C : Nom image ou null
+        deactivate I
+
+        C -> M : commencerTransaction()
+        activate M
+        M -> DB : BEGIN TRANSACTION
+        DB --> M : Transaction ouverte
+        M --> C : OK
+        deactivate M
+
+        C -> M : ajouter(nom, description,\nprix, stock, idCategorie)
+        activate M
+        M -> DB : CALL ajouter_produit(...)
+        DB --> M : Identifiant du produit
+        M --> C : idProduit
+        deactivate M
+
+        opt Une image a ete enregistree
+            C -> M : modifierImage(idProduit, nomImage)
+            activate M
+            M -> DB : CALL modifier_image_produit(...)
+            DB --> M : Mise a jour effectuee
+            M --> C : OK
+            deactivate M
+        end
+
+        alt Toutes les operations reussissent
+            C -> M : validerTransaction()
+            activate M
+            M -> DB : COMMIT
+            DB --> M : Transaction validee
+            M --> C : OK
+            deactivate M
+
+            C -> S : Enregistrer admin_succes
+            C --> V : Redirection 303 vers admin_produits
+
+        else Une operation SQL echoue
+            C -> M : annulerTransaction()
+            activate M
+            M -> DB : ROLLBACK
+            DB --> M : Transaction annulee
+            M --> C : OK
+            deactivate M
+
+            opt Une nouvelle image avait ete enregistree
+                C -> I : Supprimer le fichier image
+            end
+
+            C -> C : Traiter l'erreur
+            C -> S : Enregistrer admin_erreur
+            C --> V : Redirection 303 vers admin_produits
+        end
+    end
+end
+
+deactivate C
+
+@enduml

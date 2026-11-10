@@ -1,0 +1,107 @@
+
+@startuml
+title MiniShop - Diagramme de classes
+
+skinparam classAttributeIconSize 0
+
+class Client {
+    - pdo : PDO
+    --
+    + __construct(pdo : PDO)
+    + emailExiste(email : string) : bool
+    + creerClient(nom : string, prenom : string, email : string, motDePasse : string) : bool
+    + trouverParEmail(email : string) : array?
+    + trouverParId(idClient : int) : array?
+    + modifierProfil(idClient : int, nom : string, prenom : string, email : string) : bool
+}
+
+
+class Categorie {
+    - pdo : PDO
+    --
+    + __construct(pdo : PDO)
+    + listerAdmin() : array
+    + trouverParId(idCategorie : int) : array?
+    + ajouter(nom : string) : void
+    + modifier(idCategorie : int, nom : string) : void
+    + supprimer(idCategorie : int) : void
+}
+
+
+class Produit {
+    - pdo : PDO
+    --
+    + __construct(pdo : PDO)
+    + commencerTransaction() : void
+    + validerTransaction() : void
+    + annulerTransaction() : void
+    + getTousLesProduits() : array
+    + getProduitParId(idProduit : int) : array?
+    + rechercherProduits(nom : string) : array
+    + getProduitsParCategorie(idCategorie : int) : array
+}
+
+
+class ProduitAdmin {
+    - pdo : PDO
+    --
+    + __construct(pdo : PDO)
+    + lister() : array
+    + trouverParId(idProduit : int) : array?
+    + ajouter(nom : string, description : string, prix : string, stock : int, idCategorie : int) : int
+    + modifier(idProduit : int, nom : string, description : string, prix : string, idCategorie : int) : void
+    + changerEtat(idProduit : int, actif : bool) : void
+    + modifierStock(idProduit : int, nouveauStock : int) : void
+    + modifierImage(idProduit : int, nomImage : string) : void
+    + commencerTransaction() : void
+    + validerTransaction() : void
+    + annulerTransaction() : void
+}
+
+
+class Commande {
+    - pdo : PDO
+    --
+    + __construct(pdo : PDO)
+    + creer(idClient : int, panier : array) : int
+    + listerParClient(idClient : int) : array
+    + detailsParClient(idCommande : int, idClient : int) : array?
+}
+
+
+class CommandeAdmin {
+    - pdo : PDO
+    --
+    + __construct(pdo : PDO)
+    + lister() : array
+    + trouverParId(idCommande : int) : array?
+    + getLignes(idCommande : int) : array
+    + getHistorique(idCommande : int) : array
+    + modifierStatut(idCommande : int, statut : string) : void
+}
+
+' Associations métier et cardinalités
+
+class LigneCommande {
+    + id_commande : int
+    + id_produit : int
+    + quantite : int
+    + prix_unitaire : decimal
+}
+
+Client "1" -- "0..*" Commande : passe
+Categorie "1" -- "0..*" Produit : contient
+Commande "1" -- "1..*" LigneCommande : comprend
+Produit "1" -- "0..*" LigneCommande : concerne
+
+class HistoriqueStatutCommande {
+    + id : int
+    + order_id : int
+    + old_status : string
+    + new_status : string
+    + changed_at : datetime
+}
+
+Commande "1" -- "0..*" HistoriqueStatutCommande : possede
+
+@enduml

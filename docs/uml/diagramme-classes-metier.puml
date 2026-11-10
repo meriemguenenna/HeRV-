@@ -1,0 +1,68 @@
+
+@startuml 
+
+title MiniShop - Diagramme de classes métier
+
+skinparam classAttributeIconSize 0
+left to right direction
+
+class Client {
+    + id_client : int
+    + nom : string
+    + prenom : string
+    + email : string
+    + password : string
+    + role : string
+    + date_creation : datetime
+}
+
+class Categorie {
+    + id_categorie : int
+    + nom : string
+}
+
+class Produit {
+    + id_produit : int
+    + nom : string
+    + description : text
+    + prix : decimal
+    + stock : int
+    + actif : boolean
+    + id_categorie : int
+}
+
+class Commande {
+    + id_commande : int
+    + id_client : int
+    + date_commande : datetime
+    + statut : string
+}
+
+class LigneCommande {
+    + id_commande : int
+    + id_produit : int
+    + quantite : int
+    + prix_unitaire : decimal
+}
+
+class HistoriqueStatutCommande {
+    + id : int
+    + order_id : int
+    + old_status : string
+    + new_status : string
+    + changed_at : datetime
+}
+
+' Associations et cardinalités
+
+Client "1" -- "0..*" Commande : passe
+
+Categorie "1" -- "0..*" Produit : contient
+
+Commande "1" -- "1..*" LigneCommande : comprend
+
+Produit "1" -- "0..*" LigneCommande : concerne
+
+Commande "1" -- "0..*" HistoriqueStatutCommande : possede
+
+@enduml

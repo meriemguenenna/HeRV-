@@ -27,8 +27,12 @@ L'objectif est de vérifier que la base de données respecte les règles métier
 | Outil de test SQL | phpMyAdmin |
 | Application | PHP orienté objet avec architecture MVC |
 | Accès aux données | PDO |
-| Procédures stockées installées | 5 |
-| Triggers installés | 5 |
+| Procédures stockées installées | 17 |
+| Triggers installés | 8 |
+
+
+-Procédures stockées étudiées : 5 sur 17.
+-Triggers étudiés : 5 sur 8.
 
 ### 1.2 Méthode de test
 
@@ -448,8 +452,8 @@ Un `ROLLBACK` ne doit pas être considéré comme une protection universelle : c
 
 Les éléments suivants sont confirmés :
 
-- Les cinq procédures stockées sont installées dans MySQL.
-- Les cinq triggers sont installés dans MySQL.
+- Les 17 procédures stockées sont installées dans MySQL.
+- Les 8 triggers sont installés dans MySQL.
 - La recherche de produits fonctionne depuis PHP.
 - Le filtrage par catégorie fonctionne depuis PHP.
 - Les données du catalogue sont accessibles depuis l'application.
@@ -481,7 +485,7 @@ Les premiers tests confirment que la base de données MiniShop est correctement 
 
 Les procédures stockées de recherche et de filtrage sont utilisées avec succès depuis PHP.
 
-La base contient également les cinq procédures stockées et les cinq triggers demandés dans le cadre du projet.
+La base comprend 17 procédures stockées et 8 triggers au total. Ce compte rendu se concentre sur les cinq procédures et les cinq triggers principaux.
 
 Le compte rendu initial recense 14 tests SQL. Toutefois, les résultats détaillés de plusieurs tests doivent encore être confirmés pour disposer d'un bilan entièrement vérifiable.
 

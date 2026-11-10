@@ -1,0 +1,89 @@
+
+@startuml sequence-commande
+title MiniShop - Sequence de passage d'une commande
+
+autonumber
+
+actor "Client" as U
+boundary "Page validation" as V
+control "CommandeController" as C
+entity "Commande (modele PHP)" as M
+database "MySQL" as DB
+collections "Session PHP" as S
+
+U -> V : Confirmer la commande
+V -> C : confirmer()
+
+activate C
+
+C -> S : Lire client_id et client_role
+S --> C : Identifiant et role
+
+alt Client non connecte ou role different de client
+    C -> S : Enregistrer message d'erreur
+    C --> V : Redirection HTTP 303 vers connexion
+
+else Client autorise
+    C -> S : Recuperer le panier
+    S --> C : Panier
+
+    alt Panier vide ou invalide
+        C -> S : Enregistrer message d'erreur
+        C --> V : Redirection HTTP 303 vers panier
+
+    else Panier non vide
+        C -> M : creer(idClient, panier)
+        activate M
+
+        M -> DB : BEGIN TRANSACTION
+        activate DB
+        DB --> M : Transaction ouverte
+
+        M -> DB : INSERT INTO COMMANDE
+        DB --> M : Identifiant de commande
+
+        loop Pour chaque produit du panier
+            M -> M : Verifier identifiant et quantite
+            M -> DB : Recuperer produit actif et prix
+            DB --> M : Informations du produit
+
+            M -> DB : INSERT INTO LIGNE_COMMANDE
+
+            note right of DB
+              Trigger SQL :
+              verification du stock
+              et deduction de la quantite
+            end note
+
+            DB --> M : Insertion effectuee ou erreur
+        end
+
+        alt Toutes les operations reussissent
+            M -> DB : COMMIT
+            DB --> M : Transaction validee
+            M --> C : idCommande
+            deactivate M
+
+            C -> S : Supprimer panier
+            C -> S : Enregistrer message de succes
+            C -> S : Enregistrer commande_confirmee
+            C --> V : Redirection HTTP 303 vers confirmation
+
+        else Une operation echoue
+            M -> DB : ROLLBACK
+            DB --> M : Transaction annulee
+            M --> C : Exception
+            deactivate M
+
+            C -> C : Journaliser l'erreur
+            C -> S : Enregistrer message d'erreur
+            C --> V : Redirection HTTP 303 vers panier
+        end
+
+        deactivate DB
+    end
+end
+
+deactivate C
+
+@enduml

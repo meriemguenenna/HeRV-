@@ -164,15 +164,26 @@ BEGIN
     END IF;
 END //
 
--- 8. Lister tous les produits (actifs et inactifs)
+
+-- 8. Lister tous les produits (actifs et inactifs), avec leur image
 CREATE PROCEDURE lister_produits_admin()
 BEGIN
-    SELECT p.id_produit, p.nom, p.description, p.prix, p.stock,
-           p.actif, p.id_categorie, c.nom AS categorie
+    SELECT
+        p.id_produit,
+        p.nom,
+        p.description,
+        p.prix,
+        p.stock,
+        p.actif,
+        p.id_categorie,
+        p.image,
+        c.nom AS categorie
     FROM PRODUIT p
-    JOIN CATEGORIE c ON c.id_categorie = p.id_categorie
+    INNER JOIN CATEGORIE c
+        ON c.id_categorie = p.id_categorie
     ORDER BY p.id_produit;
 END //
+
 
 -- 9. Lister les catégories avec leur nombre de produits
 CREATE PROCEDURE lister_categories_admin()
@@ -205,6 +216,28 @@ BEGIN
     FROM ORDER_STATUS_HISTORY
     WHERE order_id = p_id_commande
     ORDER BY changed_at DESC, id DESC;
+END //
+
+
+-- 12. Modifier l'image d'un produit
+CREATE PROCEDURE modifier_image_produit(
+    IN p_id_produit INT,
+    IN p_image VARCHAR(255)
+)
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM PRODUIT
+        WHERE id_produit = p_id_produit
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Produit introuvable';
+
+    ELSE
+        UPDATE PRODUIT
+        SET image = p_image
+        WHERE id_produit = p_id_produit;
+    END IF;
 END //
 
 DELIMITER ;
